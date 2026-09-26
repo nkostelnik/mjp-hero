@@ -96,10 +96,18 @@
 
   var LEVEL_LABEL = { ok: "Generally permitted", caution: "Conditions apply", risk: "Likely problem", info: "Note" };
 
+  // Tag for a state citation: "verify" if unchecked, or a link to the source it was checked against.
+  function stateTag(c) {
+    if (c.source !== "state") return null;
+    if (c.verified === false) return el("span", { class: "verify", text: "verify" });
+    if (c.url) return el("a", { class: "src", href: c.url, target: "_blank", rel: "noopener noreferrer", title: "Checked " + (c.checked || ""), text: "source" });
+    return null;
+  }
+
   function citeList(cites) {
     if (!cites.length) return null;
     return el("ul", { class: "cites" }, cites.map(function (c) {
-      return el("li", {}, [c.cite, c.source === "state" && c.verified === false ? el("span", { class: "verify", text: "verify" }) : null]);
+      return el("li", {}, [c.cite, stateTag(c)]);
     }));
   }
 
@@ -158,7 +166,7 @@
 
     out.appendChild(el("h3", { text: "Rules and authorities cited" }));
     out.appendChild(el("dl", { class: "authorities" }, r.citations.reduce(function (acc, c) {
-      acc.push(el("dt", {}, [c.cite, c.source === "state" && c.verified === false ? el("span", { class: "verify", text: "verify" }) : null]));
+      acc.push(el("dt", {}, [c.cite, stateTag(c)]));
       if (c.text) acc.push(el("dd", { text: c.text }));
       else acc.push(el("dd", { class: "muted", text: "See the finding above." }));
       return acc;
@@ -178,7 +186,7 @@
       });
     });
     lines.push("", "Authorities:");
-    r.citations.forEach(function (c) { lines.push("- " + c.cite + (c.source === "state" && c.verified === false ? " (verify)" : "")); });
+    r.citations.forEach(function (c) { lines.push("- " + c.cite + (c.source === "state" && c.verified === false ? " (verify)" : c.url ? " <" + c.url + ">" : "")); });
     lines.push("", "Issue-spotting aid only. Confirm current rules and consult ethics counsel.");
     return lines.join("\n");
   }

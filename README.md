@@ -33,7 +33,7 @@ For every jurisdiction your facts touch, it checks:
 
 State-specific data (adopted rule, unauthorized-practice statute, temporary practice, in-house registration, pro hac vice, remote-work guidance) is included for CA, NY, TX, FL, IL, DC, NJ, PA, MA, and VA. Other jurisdictions fall back to the Model Rule with a note that the local version may differ.
 
-State citations are marked **verify** in the app until they have been checked against the current official source. To mark one verified, set `verified: true` on its entry in `js/authorities.js`.
+State citations were checked against official or reliable sources on 2026-09-26; each checked citation links to its source in the app. The few not yet checked show a **verify** tag. To mark one checked, change `u(...)` to `v(...)` in `js/authorities.js` and add the source URL.
 
 ## Files
 

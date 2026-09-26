@@ -117,6 +117,7 @@ select { font: inherit; width: 100%; max-width: 360px; padding: 7px 8px; border:
 .cites li::before { content: "§ "; }
 .verify { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--caution); border: 1px solid var(--caution); border-radius: 4px; padding: 0 4px; }
 
+.src { margin-left: 6px; font-size: 12px; color: var(--accent); }
 .authorities dt { font-weight: 600; margin-top: 8px; }
 .authorities dd { margin: 2px 0 0 0; font-size: 13.5px; color: var(--muted); }
 .authorities dd.muted { font-style: italic; }

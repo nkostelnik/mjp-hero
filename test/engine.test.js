@@ -120,6 +120,33 @@ test("disclosure N/A: no missing-disclosure flag, forward-looking recommendation
   assert.strictEqual(section(no, "TX").level, "risk");
 });
 
+test("Texas in-house: no registration required", function () {
+  var r = analyze(withBase({ residence: "TX", workLocations: ["TX"], clientLocations: ["TX"], matterLaw: ["NY"], practiceType: "inhouse" }));
+  var txt = section(r, "TX").findings.map(function (x) { return x.text; }).join(" ");
+  assert.ok(txt.indexOf("does not require in-house counsel to register") >= 0);
+});
+
+test("remote work: MA, NY-style rules ok; DC narrower guidance is caution", function () {
+  var ma = analyze(Object.assign({}, base, { licensed: ["CT"], clientLocations: ["CT"], matterLaw: ["CT"], residence: "MA", workLocations: ["MA"] }));
+  assert.strictEqual(section(ma, "MA").level, "ok");
+  assert.ok(cited(ma, "cmt. [4A]"));
+  var ny = analyze(Object.assign({}, base, { licensed: ["NJ"], clientLocations: ["NJ"], matterLaw: ["NJ"], residence: "NY", workLocations: ["NY"] }));
+  assert.strictEqual(section(ny, "NY").level, "ok");
+  assert.ok(cited(ny, "523.5"));
+  var dc = analyze(withBase({ residence: "DC", workLocations: ["DC"] }));
+  assert.strictEqual(section(dc, "DC").level, "caution");
+});
+
+test("verified state citations carry a source URL", function () {
+  var A = require("../js/authorities.js");
+  Object.keys(A.STATES).forEach(function (k) {
+    Object.keys(A.STATES[k]).forEach(function (f) {
+      var c = A.STATES[k][f];
+      if (c && c.verified) assert.ok(c.url.indexOf("https://") === 0, k + "." + f + " is verified but has no source URL");
+    });
+  });
+});
+
 var failed = 0;
 tests.forEach(function (t) {
   try { t[1](); console.log("ok   " + t[0]); }

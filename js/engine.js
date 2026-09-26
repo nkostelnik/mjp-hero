@@ -44,7 +44,7 @@
     var s = A.STATES[code];
     if (!s || !s[field]) return null;
     var c = s[field];
-    return { cite: c.cite, text: c.text, verified: c.verified, source: "state" };
+    return { cite: c.cite, text: c.text, verified: c.verified, checked: c.checked, url: c.url, source: "state", noRegistration: c.noRegistration, level: c.level };
   }
   function cites() {
     return Array.prototype.slice.call(arguments).filter(Boolean);
@@ -168,7 +168,7 @@
         if (pt === "inhouse") {
           var reg = st(code, "inHouse");
           fs.push(f("caution", "Working from " + name + " for your employer is generally permitted under the in-house exception, but " +
-            (reg ? name + " has an in-house registration or limited-license requirement you should satisfy." : "many states require in-house lawyers to register; check " + name + "'s rule.") +
+            (reg && reg.noRegistration ? name + " does not require in-house counsel to register." : reg ? name + " has an in-house registration or limited-license requirement you should satisfy." : "many states require in-house lawyers to register; check " + name + "'s rule.") +
             " The exception does not cover court appearances that require pro hac vice admission.",
             cites(aba("5.5(d)(1)"), aba("5.5 cmts"), reg)));
         } else if (pt === "federal") {
@@ -181,9 +181,12 @@
           fs.push(f("caution", "Government lawyers are often covered when federal or other law authorizes the work in " + name + ". Confirm the specific authority for your position.", cites(aba("5.5(d)(2)"))));
         } else if (!isClient && !lawHere && !held) {
           var remote = st(code, "remote");
-          fs.push(f(remote ? "ok" : "caution",
+          var remoteNarrow = remote && remote.level === "caution";
+          fs.push(f(remote && !remoteNarrow ? "ok" : "caution",
             "Working remotely from " + name + " on matters for your licensed jurisdiction, with no local office, advertising, or holding out, is generally permitted under ABA Op. 495" +
-            (remote ? ", and " + name + " has issued consistent guidance." : ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view."),
+            (remoteNarrow ? ", but " + name + "'s own guidance is narrower. Check its conditions before relying on it." :
+              remote ? ", and " + name + " has issued consistent guidance." :
+              ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view."),
             cites(aba("Op 495"), aba("Op 498"), aba("5.5(b)(1)"), remote)));
         } else if (inp.duration === "ongoing") {
           fs.push(f("risk", "Working from " + name + " on an ongoing basis for " + (isClient ? name + " clients" : "") + (isClient && lawHere ? " and " : "") + (lawHere ? name + " law matters" : "") +
