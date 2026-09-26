@@ -1,0 +1,14 @@
+{
+  "name": "mjp-hero",
+  "version": "0.1.0",
+  "description": "Offline multijurisdictional practice analyzer for lawyers. Not legal advice.",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/engine.test.js",
+    "start": "npx --yes serve -l 5195 .",
+    "build": "node build.js"
+  },
+  "license": "MIT",
+  "author": "Nate Kostelnik"
+}

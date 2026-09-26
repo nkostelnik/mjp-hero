@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- No network access: the page cannot send data anywhere. Everything runs in this browser tab. -->
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'">
+  <title>MJP Hero</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="banner" role="note">
+    <strong>Not legal advice.</strong> MJP Hero is an issue-spotting aid based on the ABA Model Rules and selected state rules. Rules vary by state and change often. Verify every citation and consult your state bar's ethics hotline or ethics counsel before relying on it.
+  </div>
+
+  <header class="top">
+    <div class="brand">MJP Hero <span>multijurisdictional practice check</span></div>
+    <div class="top-actions">
+      <span class="offline" title="This page makes no network requests. Your answers never leave this browser tab and are not saved.">Offline, nothing saved</span>
+      <button type="button" class="btn ghost" id="reset">Start over</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <form class="questions" id="form" autocomplete="off" novalidate>
+      <fieldset>
+        <legend>You</legend>
+        <div class="q">
+          <label for="residence"><span class="num">1.</span> Where do you live?</label>
+          <select id="residence" data-kind="single" data-foreign="1"></select>
+        </div>
+        <div class="q">
+          <span class="label" id="work-l"><span class="num">2.</span> Where will you physically do the work?</span>
+          <p class="hint">Include home, office, and anywhere you will spend meaningful working time.</p>
+          <div class="picker" data-field="workLocations" data-foreign="1" aria-labelledby="work-l"></div>
+        </div>
+        <div class="q">
+          <span class="label" id="lic-l"><span class="num">3.</span> Where are you licensed to practice law?</span>
+          <div class="picker" data-field="licensed" aria-labelledby="lic-l"></div>
+        </div>
+        <div class="q">
+          <span class="label"><span class="num">4.</span> Are you in good standing everywhere you are licensed?</span>
+          <p class="hint">That is, not disbarred or suspended in any jurisdiction.</p>
+          <div class="radios" data-field="goodStanding">
+            <label><input type="radio" name="goodStanding" value="yes" checked> Yes</label>
+            <label><input type="radio" name="goodStanding" value="no"> No</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>The client and the work</legend>
+        <div class="q">
+          <span class="label" id="client-l"><span class="num">5.</span> Where is the client located?</span>
+          <div class="picker" data-field="clientLocations" data-foreign="1" aria-labelledby="client-l"></div>
+        </div>
+        <div class="q">
+          <span class="label"><span class="num">6.</span> What type of practice is this?</span>
+          <div class="radios stack" data-field="practiceType">
+            <label><input type="radio" name="practiceType" value="private" checked> <b>Law firm or solo</b> <small>Representing outside clients</small></label>
+            <label><input type="radio" name="practiceType" value="inhouse"> <b>In-house</b> <small>Advising only your employer or its affiliates</small></label>
+            <label><input type="radio" name="practiceType" value="federal"> <b>Federal practice only</b> <small>For example, immigration, patent, or tax practice before a federal agency</small></label>
+            <label><input type="radio" name="practiceType" value="government"> <b>Government</b> <small>Working for a federal, state, or local government</small></label>
+          </div>
+        </div>
+        <div class="q">
+          <span class="label" id="law-l"><span class="num">7.</span> Whose law does the work mainly involve?</span>
+          <div class="picker" data-field="matterLaw" data-federal="1" aria-labelledby="law-l"></div>
+        </div>
+        <div class="q">
+          <span class="label"><span class="num">8.</span> Is this a one-time matter or ongoing work?</span>
+          <div class="radios stack" data-field="duration">
+            <label><input type="radio" name="duration" value="temporary"> <b>Temporary</b> <small>A discrete matter or a short, occasional presence</small></label>
+            <label><input type="radio" name="duration" value="ongoing" checked> <b>Ongoing</b> <small>A regular, continuing practice or arrangement</small></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Public presence</legend>
+        <div class="q">
+          <span class="label" id="hold-l"><span class="num">9.</span> Where do you have an office, a public business address, or advertising?</span>
+          <p class="hint">Include a home address listed on a website, bio, card, or directory profile. Leave empty if none.</p>
+          <div class="picker" data-field="holdOutIn" aria-labelledby="hold-l"></div>
+        </div>
+        <div class="q">
+          <span class="label"><span class="num">10.</span> Do your website, bio, letterhead, and signature state where you are admitted?</span>
+          <p class="hint">For example, "Admitted only in New York."</p>
+          <div class="radios" data-field="disclosesLimits">
+            <label><input type="radio" name="disclosesLimits" value="yes" checked> Yes</label>
+            <label><input type="radio" name="disclosesLimits" value="no"> No</label>
+            <label><input type="radio" name="disclosesLimits" value="na"> I don&#39;t have any of these</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Courts and local counsel</legend>
+        <div class="q">
+          <span class="label"><span class="num">11.</span> Is there a pending or expected proceeding?</span>
+          <div class="radios" data-field="proceeding">
+            <label><input type="radio" name="proceeding" value="none" checked> None</label>
+            <label><input type="radio" name="proceeding" value="court"> Court</label>
+            <label><input type="radio" name="proceeding" value="adr"> Arbitration or mediation</label>
+          </div>
+        </div>
+        <div class="q" data-show="proceeding">
+          <label for="proceedingIn"><span class="num">12.</span> Where is the proceeding?</label>
+          <select id="proceedingIn" data-kind="single" data-federal-court="1"></select>
+        </div>
+        <div class="q" data-show="court">
+          <span class="label"><span class="num">13.</span> Pro hac vice status</span>
+          <div class="radios" data-field="phv">
+            <label><input type="radio" name="phv" value="admitted"> Admitted</label>
+            <label><input type="radio" name="phv" value="will_seek"> Will seek it</label>
+            <label><input type="radio" name="phv" value="no" checked> No</label>
+          </div>
+        </div>
+        <div class="q">
+          <span class="label"><span class="num">14.</span> Are you working with a locally admitted lawyer who actively participates in the matter?</span>
+          <div class="radios" data-field="localCounsel">
+            <label><input type="radio" name="localCounsel" value="yes"> Yes</label>
+            <label><input type="radio" name="localCounsel" value="no" checked> No</label>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <section class="results" id="results" aria-live="polite" aria-label="Analysis"></section>
+  </div>
+
+  <footer class="foot">
+    MJP Hero runs entirely in your browser. Based on the ABA Model Rules of Professional Conduct and selected state rules. State citations marked "verify" have not been checked against the current official source.
+  </footer>
+
+  <script src="js/jurisdictions.js"></script>
+  <script src="js/authorities.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
