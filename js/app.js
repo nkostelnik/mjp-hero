@@ -206,13 +206,37 @@
   }
 
   form.addEventListener("change", update);
-  document.getElementById("reset").addEventListener("click", function () {
+  function clearAll() {
     form.reset();
     Object.keys(picks).forEach(function (k) { picks[k] = []; });
     Array.prototype.forEach.call(document.querySelectorAll(".picker"), function (b) { b._draw(); });
+  }
+
+  // A New York lawyer living in Florida, with clients in New York and California.
+  var EXAMPLE = {
+    residence: "FL", licensed: ["NY"], clientLocations: ["NY", "CA"], matterLaw: ["NY", "FED"],
+    radios: { practiceType: "private", duration: "ongoing", disclosesLimits: "yes", proceeding: "none", localCounsel: "no" }
+  };
+
+  function loadExample() {
+    clearAll();
+    document.getElementById("residence").value = EXAMPLE.residence;
+    ["licensed", "clientLocations", "matterLaw"].forEach(function (k) { picks[k] = EXAMPLE[k].slice(); });
+    Array.prototype.forEach.call(document.querySelectorAll(".picker"), function (b) { b._draw(); });
+    Object.keys(EXAMPLE.radios).forEach(function (name) {
+      var r = form.querySelector('input[name="' + name + '"][value="' + EXAMPLE.radios[name] + '"]');
+      if (r) r.checked = true;
+    });
+    update();
+  }
+
+  document.getElementById("reset").addEventListener("click", function () {
+    clearAll();
     update();
     window.scrollTo(0, 0);
   });
+  document.getElementById("example").addEventListener("click", loadExample);
 
-  update();
+  if (location.hash === "#demo") loadExample();
+  else update();
 })();

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MJP Hero social preview</title>
+<!-- Source for assets/social-preview.png (1280x640). Render with: npm run social -->
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    color: #fff;
+    background:
+      radial-gradient(700px 420px at 88% 110%, rgba(124, 58, 237, 0.55), transparent 70%),
+      radial-gradient(600px 400px at 0% 0%, rgba(37, 99, 235, 0.6), transparent 70%),
+      linear-gradient(120deg, #172a6b 0%, #1e40af 38%, #0f766e 72%, #5b21b6 100%);
+    display: grid;
+    grid-template-columns: 1fr 470px;
+    gap: 48px;
+    padding: 64px 72px;
+    align-items: center;
+  }
+  .kicker { display: inline-block; font-size: 20px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 16px; border-radius: 99px; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.4); }
+  h1 { font-size: 104px; font-weight: 900; letter-spacing: -0.035em; line-height: 1; margin: 22px 0 18px; }
+  .tag { font-size: 34px; font-weight: 600; line-height: 1.25; max-width: 640px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .badge { font-size: 19px; font-weight: 700; padding: 8px 14px; border-radius: 10px; background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255, 255, 255, 0.28); }
+
+  .card { background: #fff; color: #1d2230; border-radius: 22px; padding: 26px 26px 18px; box-shadow: 0 24px 60px rgba(8, 12, 40, 0.45); transform: rotate(1.5deg); }
+  .card h2 { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: #2563eb; margin-bottom: 14px; }
+  .head { border-left: 7px solid #b3261e; background: #fbe7e5; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+  .head b { display: block; font-size: 22px; }
+  .head span { font-size: 14px; font-weight: 700; color: #b3261e; }
+  .row { display: grid; grid-template-columns: 16px 1fr auto; gap: 12px; align-items: center; padding: 12px 4px; border-top: 1px solid #ece9e1; font-size: 20px; font-weight: 600; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .pill { font-size: 14px; font-weight: 800; padding: 4px 10px; border-radius: 99px; }
+  .ok .dot { background: #1e7a4c; } .ok .pill { color: #1e7a4c; background: #e5f4ec; }
+  .caution .dot { background: #9a6700; } .caution .pill { color: #9a6700; background: #fdf3dc; }
+  .risk .dot { background: #b3261e; } .risk .pill { color: #b3261e; background: #fbe7e5; }
+  .cite { font-size: 14px; color: #5d6475; padding: 10px 4px 0; border-top: 1px solid #ece9e1; }
+</style>
+</head>
+<body>
+  <div>
+    <span class="kicker">For lawyers</span>
+    <h1>MJP Hero</h1>
+    <p class="tag">Can you practice law there? A multijurisdictional practice check with rule citations.</p>
+    <div class="badges">
+      <span class="badge">ABA Model Rules 5.5 &amp; 8.5</span>
+      <span class="badge">ABA Op. 495 remote work</span>
+      <span class="badge">10 states, sourced</span>
+      <span class="badge">Offline, nothing saved</span>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Your analysis</h2>
+    <div class="head"><span>Likely problem</span><b>Likely unauthorized-practice problems</b></div>
+    <div class="row ok"><span class="dot"></span>Florida (you live here)<span class="pill">Permitted</span></div>
+    <div class="row caution"><span class="dot"></span>California (client)<span class="pill">Conditions</span></div>
+    <div class="row risk"><span class="dot"></span>Texas (office listed)<span class="pill">Problem</span></div>
+    <p class="cite">§ ABA Model Rule 5.5(b)(1) &nbsp; § ABA Formal Op. 495 &nbsp; § Fla. R. 4-5.5</p>
+  </div>
+</body>
+</html>

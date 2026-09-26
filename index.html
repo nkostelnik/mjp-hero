@@ -6,6 +6,15 @@
   <!-- No network access: the page cannot send data anywhere. Everything runs in this browser tab. -->
   <meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'">
   <title>MJP Hero</title>
+  <meta name="description" content="Free, offline issue-spotter for lawyers practicing across state lines. Answer 14 questions and get a recommendation citing ABA Model Rules 5.5 and 8.5, ABA Op. 495, and state rules. Not legal advice.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MJP Hero: can you practice law there?">
+  <meta property="og:description" content="Free, offline issue-spotter for lawyers practicing across state lines. Answer 14 questions and get a recommendation citing ABA Model Rules 5.5 and 8.5, ABA Op. 495, and state rules. Not legal advice.">
+  <meta property="og:url" content="https://nkostelnik.github.io/mjp-hero/">
+  <meta property="og:image" content="https://nkostelnik.github.io/mjp-hero/assets/social-preview.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,6 +26,7 @@
     <div class="brand">MJP Hero <span>multijurisdictional practice check</span></div>
     <div class="top-actions">
       <span class="offline" title="This page makes no network requests. Your answers never leave this browser tab and are not saved.">Offline, nothing saved</span>
+      <button type="button" class="btn ghost" id="example">Try an example</button>
       <button type="button" class="btn ghost" id="reset">Start over</button>
     </div>
   </header>

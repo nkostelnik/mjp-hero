@@ -1,51 +1,100 @@
 # MJP Hero
 
-An offline issue-spotter for a lawyer's multijurisdictional practice. Answer where you live, where you work, where you are licensed, and where the client is (plus a few follow-ups), and MJP Hero gives a recommendation with citations to the relevant rules of professional conduct.
+**Can you practice law there?** MJP Hero is a free, offline issue-spotter for a lawyer's multijurisdictional practice. Answer 14 questions about where you live, where you work, where you are licensed, and where your client is, and it gives you a recommendation with citations to the rules of professional conduct that apply.
 
-**Not legal advice.** This is an issue-spotting aid. Rules vary by state and change often. Verify every citation and consult ethics counsel or your state bar's ethics hotline.
+**[Try it in your browser](https://nkostelnik.github.io/mjp-hero/)** · [See an example](https://nkostelnik.github.io/mjp-hero/#demo) · [Download the single-file version](https://github.com/nkostelnik/mjp-hero/releases/latest)
 
-## Privacy and offline use
+![MJP Hero showing an analysis for a New York lawyer living in Florida with clients in New York and California](assets/screenshot.png)
 
-- No server, no build step, no dependencies. It is plain HTML, CSS, and JavaScript.
-- It makes no network requests. A Content-Security-Policy (`connect-src 'none'`) blocks outbound connections, and there are no external fonts, scripts, or analytics.
-- Answers are not saved anywhere, not even in browser storage. Closing the tab erases them.
+> **Not legal advice.** MJP Hero is an issue-spotting aid. Rules vary by state and change often. Verify every citation and consult ethics counsel or your state bar's ethics hotline before relying on it.
 
-That makes it suitable for locked-down work environments: copy the folder to a shared drive or intranet server and open `index.html`.
+## What it asks
 
-## Running it
+1. Where do you live?
+2. Where will you physically do the work?
+3. Where are you licensed?
+4. Are you in good standing everywhere you are licensed?
+5. Where is the client located?
+6. What type of practice is this? (law firm, in-house, federal practice, government)
+7. Whose law does the work mainly involve?
+8. Is it a one-time matter or ongoing work?
+9. Where do you have an office, public address, or advertising?
+10. Do your website, bio, letterhead, and signature state where you are admitted?
+11. Is there a pending or expected proceeding? (court, arbitration, or mediation)
+12. Where is it?
+13. What is your pro hac vice status?
+14. Are you working with locally admitted counsel?
 
-- **Locally:** open `index.html` in a browser, or run `npm start` and visit http://localhost:5195.
-- **GitHub Pages:** push the folder to a repository and enable Pages on the branch root.
-- **Single file for work:** `npm run build` writes `dist/mjp-hero.html`, one self-contained file with the CSS and JavaScript inlined. Email it or put it on a shared drive; it opens by double-click.
-- **Tests:** `npm test` runs the rules-engine tests in Node.
+## What you get
 
-## What it analyzes
+- **An overall verdict:** generally permitted, conditions apply, or likely problem.
+- **A recommendation** with concrete next steps, such as adding an "Admitted only in" statement, registering as in-house counsel, seeking pro hac vice admission, or associating local counsel.
+- **A finding for every jurisdiction your facts touch**, each with the rules behind it.
+- **A list of every authority cited.** State citations link to the source they were checked against.
+- **Copy as text** or **print / save as PDF** for your file.
 
-For every jurisdiction your facts touch, it checks:
+## What it covers
 
-- Physical presence where you are not licensed (ABA Model Rule 5.5(b), ABA Formal Op. 495 on remote work, Op. 498 on virtual practice)
-- Holding out, offices, and advertising (5.5(b)(2), 7.1)
-- Temporary practice safe harbors (5.5(c)(1) to (c)(4))
-- In-house and federally authorized practice (5.5(d)(1), (d)(2), *Sperry v. Florida*)
-- Court and ADR proceedings, pro hac vice, and local counsel
-- Disciplinary authority and choice of law (8.5(a), 8.5(b))
-- Competence when another jurisdiction's law is involved (1.1)
+**ABA baseline (every jurisdiction)**
 
-State-specific data (adopted rule, unauthorized-practice statute, temporary practice, in-house registration, pro hac vice, remote-work guidance) is included for CA, NY, TX, FL, IL, DC, NJ, PA, MA, and VA. Other jurisdictions fall back to the Model Rule with a note that the local version may differ.
+- Model Rule 5.5: local office and systematic presence, holding out, the four temporary-practice safe harbors in 5.5(c), and in-house and federal practice under 5.5(d)
+- Model Rule 8.5: disciplinary authority and choice of law
+- Model Rules 7.1 (communications) and 1.1 (competence)
+- ABA Formal Op. 495 (lawyers working remotely) and Op. 498 (virtual practice)
+- *Sperry v. Florida*, 373 U.S. 379 (1963), for federally authorized practice
 
-State citations were checked against official or reliable sources on 2026-09-26; each checked citation links to its source in the app. The few not yet checked show a **verify** tag. To mark one checked, change `u(...)` to `v(...)` in `js/authorities.js` and add the source URL.
+**State-specific rules for 10 jurisdictions**
 
-## Files
+| State | Remote work from the state | In-house counsel | Also flags |
+| --- | --- | --- | --- |
+| California | No Op. 495 equivalent | Cal. R. Ct. 9.46 | *Birbrower*; temporary practice (9.47, 9.48); arbitration (9.43) |
+| New York | 22 NYCRR 523.5 | Part 522 | Judiciary Law § 470 office rule for nonresident NY lawyers; Part 523 |
+| Texas | Rule 5.05(d) (2024) | 5.05(c), no registration | Pro hac vice (Rule XIX) |
+| Florida | 318 So. 3d 538; Rule 4-5.5 cmt. | Chapter 17 | Three pro hac vice appearances per year |
+| Illinois | None specific | S. Ct. R. 716 | Rule 707 |
+| D.C. | Rule 49(c)(13), occasional only | | Rule 49 |
+| New Jersey | Op. 59 / Op. 742 | R. 1:27-2 | RPC 5.5(b)(3)(iv) |
+| Pennsylvania | None specific | B.A.R. 302 | B.A.R. 301 |
+| Massachusetts | Rule 5.5 cmt. [4A] (2024) | S.J.C. Rule 4:02(9) | |
+| Virginia | LEO 1896 | Rule 1A:5 | Rule 1A:4 |
+
+Other jurisdictions fall back to the ABA Model Rule with a note that the local version may differ.
+
+State citations were checked against official or reliable sources on 2026-09-26. A few well-known citations that were not checked show a **verify** tag in the app.
+
+## Built to run anywhere, including locked-down work environments
+
+- **No network access.** A Content-Security-Policy (`connect-src 'none'`) blocks all outbound requests. No external fonts, scripts, or analytics.
+- **Nothing is saved.** No cookies or browser storage. Closing the tab erases your answers.
+- **No install.** Plain HTML, CSS, and JavaScript. No server and no build step needed to use it.
+
+To use it at work, download `mjp-hero.html` from the [latest release](https://github.com/nkostelnik/mjp-hero/releases/latest) and open it by double-click, or copy the whole folder to a shared drive or intranet server and open `index.html`.
+
+## Development
+
+Requires Node.js only for tests and builds.
+
+| Command | What it does |
+| --- | --- |
+| `npm test` | Runs the rules-engine tests |
+| `npm start` | Serves the app at http://localhost:5195 |
+| `npm run build` | Writes `dist/mjp-hero.html`, a single self-contained file |
+| `npm run social` | Renders `assets/social-preview.png` and `assets/screenshot.png` with headless Chrome or Edge |
 
 | File | Purpose |
 | --- | --- |
-| `js/jurisdictions.js` | Jurisdiction list |
+| `js/engine.js` | Rules engine (`MJP.analyze`), a pure function that runs in the browser and in Node |
 | `js/authorities.js` | ABA and state citation library |
-| `js/engine.js` | Rules engine (`MJP.analyze`), pure and testable |
-| `js/app.js` | Form, rendering, copy and print |
+| `js/jurisdictions.js` | Jurisdiction list |
+| `js/app.js` | Form, rendering, copy, and print |
 | `test/engine.test.js` | Engine tests |
-| `build.js` | Single-file build |
+
+### Adding or correcting a state
+
+State data lives in `js/authorities.js`. Use `v(cite, text, sourceUrl)` for a citation you have checked against a source and `u(cite, text)` for one you have not. The tests require every checked citation to have a source URL. Corrections and new states are welcome as issues or pull requests; please include a link to the official rule or opinion.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+MJP Hero does not create an attorney-client relationship and is not a substitute for advice from ethics counsel.
