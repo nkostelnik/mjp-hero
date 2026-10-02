@@ -48,65 +48,65 @@
 
 **All 50 states and D.C.**
 
-Every state and D.C. has its version of Rule 5.5, its in-house counsel rule, its pro hac vice rule, and its position on remote work by out-of-state lawyers. Where no remote-work rule or opinion was found, the app says so and gives the date of the search. Some states have additional rules the tool also applies, such as California's *Birbrower* rule, New York's office requirement for nonresident New York lawyers, New Jersey's occasional-practice rule, Washington's resident-agent rule, client-notice requirements in Minnesota and Arizona, and Missouri's rule for remote in-house work.
+Every state and D.C. has its version of Rule 5.5, its in-house counsel rule (with filing deadlines where they exist), its pro hac vice rule, its position on remote work by out-of-state lawyers, any state-specific limits on temporary practice, and its paths to full admission (admission on motion and Uniform Bar Exam score transfer, from the NCBE Comprehensive Guide). Where no remote-work rule or opinion was found, the app says so and gives the date of the search. Some states have additional rules the tool also applies, such as California's *Birbrower* rule, New York's office requirement for nonresident New York lawyers, New Jersey's occasional-practice rule, Washington's resident-agent rule, client-notice requirements in Minnesota and Arizona, and Missouri's rule for remote in-house work.
 
-| Jurisdiction | Remote work from the state | In-house counsel | Pro hac vice |
-| --- | --- | --- | --- |
-| Alabama | No guidance found (2026-10-01) | Rules Governing Admission to the Ala. State Bar, Rule VIII | Rules Governing Admission to the Ala. State Bar, Rule VII |
-| Alaska | No guidance found (2026-10-01) | Alaska R. Prof. Conduct 5.5(d)(1) (no registration) | Alaska R. Civ. P. 81 |
-| Arizona | Yes: Ariz. ER 5.5(d) | Ariz. R. Sup. Ct. 38(a) | Ariz. R. Sup. Ct. 39 (pro hac vice) |
-| Arkansas | No guidance found (2026-10-01) | Ark. R. Prof. Conduct 5.5(d)(1) (no registration) | Ark. Sup. Ct. Rules Governing Admission, Rule XIV (practice by comity) |
-| California | Limited: Bar Ass'n of S.F. Ethics Op. 2021-1 | Cal. Rules of Court 9.46 | Cal. Rules of Court 9.40 |
-| Colorado | Yes: Colo. RPC 5.5, cmt. [1] (amended Feb. 2024); C.R.C.P. 205.1 | C.R.C.P. 204.1 (single-client counsel) | C.R.C.P. 205 |
-| Connecticut | Yes: Conn. RPC 5.5(f); Conn. Practice Book § 2-44A(c) (eff. Jan. 1, 2023) | Conn. Practice Book § 2-15A | Conn. Practice Book § 2-16 |
-| Delaware | No guidance found (2026-10-01) | Del. Sup. Ct. R. 55.1 | Del. Sup. Ct. R. 72 (Supreme Court); trial courts have parallel rules |
-| District of Columbia | Limited: D.C. Ct. App. R. 49(c)(13); D.C. Comm. on Unauthorized Practice of Law Op. 24-20 (2020) | D.C. Ct. App. R. 49(c)(6) (no registration) | D.C. Ct. App. R. 49(c)(7) |
-| Florida | Yes: Fla. Bar re Advisory Op. - Out-of-State Attorney Working Remotely from Florida Home, 318 So. 3d 538 (Fla. 2021) | R. Regulating Fla. Bar ch. 17 | R. Regulating Fla. Bar 1-3.10; Fla. R. Gen. Prac. & Jud. Admin. 2.510 |
-| Georgia | No guidance found (2026-10-01) | Ga. R. Prof. Conduct 5.5(d)(1) (no registration) | Ga. Unif. Super. Ct. R. 4.4 |
-| Hawaii | Yes: Haw. RPC 5.5, cmt. [3] (eff. July 1, 2022) | **No in-house exception** | Haw. Sup. Ct. R. 1.9 |
-| Idaho | No guidance found (2026-10-01) | Idaho Bar Comm'n R. 225 | Idaho Bar Comm'n R. 227 |
-| Illinois | No guidance found (2026-10-01) | Ill. S. Ct. R. 716 (amended eff. Jan. 1, 2026) | Ill. S. Ct. R. 707 |
-| Indiana | No guidance found (2026-10-01) | Ind. Admis. & Disc. R. 6, § 2 | Ind. Admis. & Disc. R. 3, § 2 |
-| Iowa | No guidance found (2026-10-01) | Iowa Ct. R. 31.16 | Iowa Ct. R. 31.14 |
-| Kansas | No guidance found (2026-10-01) | Kan. Sup. Ct. R. 721 | Kan. Sup. Ct. R. 116 (district courts); R. 1.10 (appellate courts) |
-| Kentucky | No guidance found (2026-10-01) | Ky. SCR 2.111 | Ky. SCR 3.030(2) |
-| Louisiana | No guidance found (2026-10-01) | La. Sup. Ct. R. XVII, § 14 | La. Sup. Ct. R. XVII, § 13 |
-| Maine | Yes: Me. Prof. Ethics Comm'n Op. 189 (2005) | Me. RPC 5.5(d)(1) (no registration) | Me. Rev. Stat. tit. 4, § 802; Me. R. Civ. P. 89(b) |
-| Maryland | No guidance found (2026-10-01) | Md. Rule 19-305.5(d)(1) (no registration) | Rules Governing Admission to the Maryland Bar (pro hac vice) |
-| Massachusetts | Yes: Mass. R. Prof. C. 5.5, cmt. [4A] (eff. Apr. 1, 2024) | S.J.C. Rule 4:02(9) | Mass. Gen. Laws ch. 221, § 46A |
-| Michigan | Yes: Mich. Ethics Op. RI-382 (2021) | Mich. Bd. of Law Examiners R. 5(D) | MCR 8.126 |
-| Minnesota | Yes: Minn. RPC 5.5(d) | Minn. R. Admission to the Bar 9 (temporary), 10 (permanent) | Minn. Gen. R. Prac. 5; Minn. R. Civ. App. P. 143.05 |
-| Mississippi | No guidance found (2026-10-01) | Miss. R. Prof. Conduct 5.5(d) | Miss. R. App. P. 46(b) |
-| Missouri | **No** (rejects Op. 495): Mo. Informal Advisory Op. 2024-03 (2024) | Mo. S. Ct. R. 8.105 | Mo. Sup. Ct. R. 9.03 |
-| Montana | No guidance found (2026-10-01) | Mont. R. Prof. Conduct 5.5(d)(1) (no registration) | Montana pro hac vice rules, Rule IV |
-| Nebraska | No guidance found (2026-10-01) | Neb. Ct. R. ch. 3, art. 12 | Neb. Ct. R. § 3-106 |
-| Nevada | No guidance found (2026-10-01) | Nev. Sup. Ct. R. 49.1 | Nev. Sup. Ct. R. 42 |
-| New Hampshire | Yes: N.H. RPC 5.5(d) & Ethics Committee cmt. 3 | N.H. RPC 5.5(d)(1) (no registration) | N.H. Sup. Ct. R. 33 |
-| New Jersey | Yes: N.J. Comm. on the Unauthorized Practice of Law Op. 59 / Advisory Comm. on Prof'l Ethics Op. 742 (2021) | N.J. Ct. R. 1:27-2 | N.J. Ct. R. 1:21-2 |
-| New Mexico | No guidance found (2026-10-01) | Rule 16-505(D)(1) NMRA (no registration) | Rule 24-106 NMRA |
-| New York | Yes: 22 NYCRR § 523.5 (Working From Home) | 22 NYCRR Part 522 | 22 NYCRR § 520.11 |
-| North Carolina | Yes: N.C. RPC 5.5; N.C. State Bar, "Home is Where the Heart Is" (2021) | N.C. RPC 5.5(d)(1) (no registration) | N.C. Gen. Stat. § 84-4.1 |
-| North Dakota | No guidance found (2026-10-01) | N.D. Admission to Practice R. 3(C) | N.D. Admission to Practice R. 3(A) |
-| Ohio | Yes: Ohio Prof. Cond. R. 5.5(d)(4) (eff. Sept. 1, 2021) | Ohio Gov. Bar R. VI, § 3 | Ohio Gov. Bar R. XII |
-| Oklahoma | No guidance found (2026-10-01) | Rules Governing Admission to the Practice of Law in Okla., Rule Two, § 5 | Okla. Stat. tit. 5, ch. 1, app. 1, art. II, § 5 |
-| Oregon | Yes: Or. Formal Ethics Op. 2022-200 | Or. Rules for Admission 16.05 | UTCR 3.170; ORS 9.241 |
-| Pennsylvania | No guidance found (2026-10-01) | Pa. Bar Admission R. 302 | Pa. Bar Admission R. 301 |
-| Rhode Island | Yes: R.I. RPC 5.5, cmt. [4] | R.I. Sup. Ct. R. Art. II, R. 9(b) | R.I. Sup. Ct. R. Art. II (pro hac vice) |
-| South Carolina | Yes: S.C. RPC 5.5, cmt. [4] (amended Mar. 15, 2023) | S.C. App. Ct. R. 405 | S.C. App. Ct. R. 404 |
-| South Dakota | No guidance found (2026-10-01) | Model Rule 5.5(d)(1) assumed | SDCL § 16-18-2 |
-| Tennessee | No guidance found (2026-10-01) | Tenn. Sup. Ct. R. 7, § 10.01 | Tenn. Sup. Ct. R. 19 |
-| Texas | Yes: Tex. Disciplinary R. Prof'l Conduct 5.05(d) | Tex. Disciplinary R. Prof'l Conduct 5.05(c) (no registration) | Rules Governing Admission to the Bar of Texas, Rule XIX; Tex. Gov't Code § 82.0361 |
-| Utah | Yes: Utah Ethics Advisory Op. 19-03 (2019) | Utah State Bar R. 14-719 | Utah Sup. Ct. R. 14-806 |
-| Vermont | Yes: Vt. RPC 5.5, cmt. [22] | Vt. RPC 5.5(d)(1) (no registration) | Vermont pro hac vice rules (Vermont Judiciary) |
-| Virginia | Yes: Va. Legal Ethics Op. 1896 (2021) | Va. Sup. Ct. R. 1A:5 | Va. Sup. Ct. R. 1A:4 |
-| Washington | Yes: WSBA Advisory Op. 201601 (2016, amended 2022) | Wash. APR 8(f) | Wash. APR 8(b) |
-| West Virginia | No guidance found (2026-10-01) | W. Va. R. Prof. Conduct 5.5(d)(1) (no registration) | W. Va. Rules for Admission to the Practice of Law, Rule 8.0 |
-| Wisconsin | Yes: Wis. Formal Ethics Op. EF-21-02 (2021) | Wis. SCR 10.03(4)(f) | Wis. SCR 10.03(4)(b), (d) |
-| Wyoming | No guidance found (2026-10-01) | Wyo. R. Prof. Conduct 5.5(d)(1) (no registration) | Rules Governing Admission to the Practice of Law in Wyo., Rule 8 |
+| Jurisdiction | Remote work from the state | In-house counsel | Temporary practice | Pro hac vice | Full admission |
+| --- | --- | --- | --- | --- | --- |
+| Alabama | No guidance found (2026-10-01) | Rules Governing Admission to the Ala. State Bar, Rule VIII | Model Rule 5.5(c) | Rules Governing Admission to the Ala. State Bar, Rule VII | On motion: 5 of past 6 (reciprocal); UBE 260+ |
+| Alaska | No guidance found (2026-10-01) | Alaska R. Prof. Conduct 5.5(d)(1) (no registration) | Model Rule 5.5(c) | Alaska R. Civ. P. 81 | On motion: 3 of past 5; UBE 270+ |
+| Arizona | Yes: Ariz. ER 5.5(d) | Ariz. R. Sup. Ct. 38(a) (within 90 days) | Model Rule 5.5(c) | Ariz. R. Sup. Ct. 39 (pro hac vice) | On motion: 3 of past 5 (reciprocal); UBE 270+ |
+| Arkansas | No guidance found (2026-10-01) | Ark. R. Prof. Conduct 5.5(d)(1) (no registration) | Model Rule 5.5(c) | Ark. Sup. Ct. Rules Governing Admission, Rule XIV (practice by comity) | On motion: 3 of past 5 (reciprocal); UBE 270+ |
+| California | Limited: Bar Ass'n of S.F. Ethics Op. 2021-1 | Cal. Rules of Court 9.46 | State conditions | Cal. Rules of Court 9.40 | No admission on motion |
+| Colorado | Yes: Colo. RPC 5.5, cmt. [1] (amended Feb. 2024); C.R.C.P. 205.1 | C.R.C.P. 204.1 (single-client counsel) | Model Rule 5.5(c) | C.R.C.P. 205.3 | On motion: 3 of past 5; UBE 270+ |
+| Connecticut | Yes: Conn. RPC 5.5(f); Conn. Practice Book § 2-44A(c) (eff. Jan. 1, 2023) | Conn. Practice Book § 2-15A | Client-based | Conn. Practice Book § 2-16 | On motion: 5 of past 10 (reciprocal); UBE 266+ |
+| Delaware | No guidance found (2026-10-01) | Del. Sup. Ct. R. 55.1 (amended July 14, 2025) (within 30 days) | Model Rule 5.5(c) | Del. Sup. Ct. R. 72 (Supreme Court); trial courts have parallel rules | No admission on motion |
+| District of Columbia | Limited: D.C. Ct. App. R. 49(c)(13); D.C. Comm. on Unauthorized Practice of Law Op. 24-20 (2020) | D.C. Ct. App. R. 49(c)(6) (no registration) | Model Rule 5.5(c) | D.C. Ct. App. R. 49(c)(7) | On motion: 3; UBE 266+ |
+| Florida | Yes: Fla. Bar re Advisory Op. - Out-of-State Attorney Working Remotely from Florida Home, 318 So. 3d 538 (Fla. 2021) | R. Regulating Fla. Bar ch. 17 | Model Rule 5.5(c) | R. Regulating Fla. Bar 1-3.10; Fla. R. Gen. Prac. & Jud. Admin. 2.510 | No admission on motion |
+| Georgia | Yes: Ga. Formal Advisory Op. 22-1 (approved by the Supreme Court of Georgia, June 11, 2024) | Ga. R. Prof. Conduct 5.5(d)(1) (no registration) | Model Rule 5.5(c) | Ga. Unif. Super. Ct. R. 4.4 | On motion: 5 of past 7 (reciprocal) |
+| Hawaii | Yes: Haw. RPC 5.5, cmt. [3] (eff. July 1, 2022) | **No in-house exception** | **No general safe harbor** | Haw. Sup. Ct. R. 1.9 | On motion: limited |
+| Idaho | No guidance found (2026-10-01) | Idaho Bar Comm'n R. 225 | Limited: (c)(1), (c)(2), (c)(4) | Idaho Bar Comm'n R. 227 | On motion: 3 of past 5; UBE 266+ |
+| Illinois | No guidance found (2026-10-01) | Ill. S. Ct. R. 716 (amended eff. Jan. 1, 2026) (within 90 days) | Model Rule 5.5(c) | Ill. S. Ct. R. 707 | On motion: 3 of past 5; UBE 266+ |
+| Indiana | No guidance found (2026-10-01) | Ind. Admis. & Disc. R. 6, § 2 | Model Rule 5.5(c) | Ind. Admis. & Disc. R. 3, § 2 | On motion: 3 of past 5; UBE 264+ |
+| Iowa | No guidance found (2026-10-01) | Iowa Ct. R. 31.16 (within 90 days) | Model Rule 5.5(c) | Iowa Ct. R. 31.14 | On motion: 5 of past 7; UBE 260 or 266+ |
+| Kansas | No guidance found (2026-10-01) | Kan. Sup. Ct. R. 721 (within 90 days) | Model Rule 5.5(c) | Kan. Sup. Ct. R. 116 (district courts); R. 1.10 (appellate courts) | On motion: 5 of past 7; UBE 266+ |
+| Kentucky | No guidance found (2026-10-01) | Ky. SCR 2.111 | Limited: (c)(2), (c)(3), (c)(4) | Ky. SCR 3.030(2) | On motion: 5 of past 7 (reciprocal); UBE 266+ |
+| Louisiana | No guidance found (2026-10-01) | La. Sup. Ct. R. XVII, § 14 | Model Rule 5.5(c) | La. Sup. Ct. R. XVII, § 13 | No admission on motion |
+| Maine | Yes: Me. Prof. Ethics Comm'n Op. 189 (2005) | Me. RPC 5.5(d)(1) (no registration) | Client-based | Me. Rev. Stat. tit. 4, § 802; Me. R. Civ. P. 89(b) | On motion: 3 of past 5; UBE 270+ |
+| Maryland | No guidance found (2026-10-01) | Md. Rule 19-305.5(d)(1) (no registration) | Model Rule 5.5(c) | Md. Rule 19-214 | On motion: 3 of past 5, or 10 total; UBE 266+ |
+| Massachusetts | Yes: Mass. R. Prof. C. 5.5, cmt. [4A] (eff. Apr. 1, 2024) | S.J.C. Rule 4:02(9) | Model Rule 5.5(c) | Mass. Gen. Laws ch. 221, § 46A | On motion: 5 of past 7; UBE 270+ |
+| Michigan | Yes: Mich. Ethics Op. RI-382 (2021) | Mich. Bd. of Law Examiners R. 5(D) | Model Rule 5.5(c) | MCR 8.126 | On motion: 3 of past 5; UBE 268+ |
+| Minnesota | Yes: Minn. RPC 5.5(d) | Minn. R. Admission to the Bar 9 (temporary), 10 (permanent) | Model Rule 5.5(c) | Minn. Gen. R. Prac. 5; Minn. R. Civ. App. P. 143.05 | On motion: 3 of past 5; UBE 260+ |
+| Mississippi | No guidance found (2026-10-01) | Miss. R. Prof. Conduct 5.5(d) | Model Rule 5.5(c) | Miss. R. App. P. 46(b) | On motion: 5 |
+| Missouri | **No** (rejects Op. 495): Mo. Informal Advisory Op. 2024-03 (2024) | Mo. S. Ct. R. 8.105 | Model Rule 5.5(c) | Mo. Sup. Ct. R. 9.03 | On motion: 5 of past 10 (reciprocal); UBE 260+ |
+| Montana | No guidance found (2026-10-01) | Mont. R. Prof. Conduct 5.5(d)(1) (no registration) | Verify | Mont. R. Admission to the Bar VI | On motion: 5 of past 7; UBE 266+ |
+| Nebraska | No guidance found (2026-10-01) | Neb. Ct. R. §§ 3-1201 to 3-1204 (within 90 days) | Model Rule 5.5(c) | Neb. Ct. R. § 3-106 | On motion: 3 of past 5; UBE 270+ |
+| Nevada | No guidance found (2026-10-01); Nev. ADKT 0633 (pending) | Nev. Sup. Ct. R. 49.1 | State conditions | Nev. Sup. Ct. R. 42 | No admission on motion |
+| New Hampshire | Yes: N.H. RPC 5.5(d) & Ethics Committee cmt. 3 | N.H. RPC 5.5(d)(1) (no registration) | Model Rule 5.5(c) | N.H. Sup. Ct. R. 33 | On motion: 5 of past 7 (or the past 3) (reciprocal); UBE 270+ |
+| New Jersey | Yes: N.J. Comm. on the Unauthorized Practice of Law Op. 59 / Advisory Comm. on Prof'l Ethics Op. 742 (2021) | N.J. Ct. R. 1:27-2 | Client-based | N.J. Ct. R. 1:21-2 | On motion: 5 of past 7 (reciprocal); UBE 266+ |
+| New Mexico | No guidance found (2026-10-01) | Rule 15-308 NMRA | Model Rule 5.5(c) | Rule 24-106 NMRA | On motion: 5 of past 7 (reciprocal); UBE 260+ |
+| New York | Yes: 22 NYCRR § 523.5 (Working From Home) | 22 NYCRR Part 522 | State conditions | 22 NYCRR § 520.11 | On motion: 5 of past 7 (reciprocal); UBE 266+ |
+| North Carolina | Yes: N.C. RPC 5.5; N.C. State Bar, "Home is Where the Heart Is" (2021) | N.C. RPC 5.5(d)(1) (no registration) | Client-based | N.C. Gen. Stat. § 84-4.1 | On motion: 4 of past 6 (reciprocal); UBE 270+ |
+| North Dakota | No guidance found (2026-10-01) | N.D. Admission to Practice R. 3(C) | State conditions | N.D. Admission to Practice R. 3(A) | On motion: 4 of past 5; UBE 260+ |
+| Ohio | Yes: Ohio Prof. Cond. R. 5.5(d)(4) (eff. Sept. 1, 2021) | Ohio Gov. Bar R. VI, § 3 | Model Rule 5.5(c) | Ohio Gov. Bar R. XII | On motion: 5 of past 7; UBE 270+ |
+| Oklahoma | No guidance found (2026-10-01) | Rules Governing Admission to the Practice of Law in Okla., Rule Two, § 5 | Model Rule 5.5(c) | Okla. Stat. tit. 5, ch. 1, app. 1, art. II, § 5 | On motion: 3 of past 5 (reciprocal); UBE 260+ |
+| Oregon | Yes: Or. Formal Ethics Op. 2022-200 | Or. Rules for Admission 16.05 | Model Rule 5.5(c) | UTCR 3.170; ORS 9.241 | On motion: 2 of past 4; UBE 270+ |
+| Pennsylvania | No guidance found (2026-10-01); Pa. Bar Ass'n informal ethics opinion | Pa. Bar Admission R. 302 | Model Rule 5.5(c) | Pa. Bar Admission R. 301 | On motion: 5 of past 7 (reciprocal); UBE 270+ |
+| Rhode Island | Yes: R.I. RPC 5.5, cmt. [4] | R.I. Sup. Ct. R. Art. II, R. 9(b) | Model Rule 5.5(c) | R.I. Sup. Ct. R. Art. II, R. 9(a) | No admission on motion; UBE 270+ |
+| South Carolina | Yes: S.C. RPC 5.5, cmt. [4] (amended Mar. 15, 2023) | S.C. App. Ct. R. 405 | Client-based | S.C. App. Ct. R. 404 | On motion: limited; UBE 266+ |
+| South Dakota | No guidance found (2026-10-01) | S.D. R. Prof. Conduct 5.5(d) (no registration) | State conditions | SDCL § 16-18-2 | On motion: 3 of past 5 (reciprocal) |
+| Tennessee | No guidance found (2026-10-01) | Tenn. Sup. Ct. R. 7, § 10.01 (within 180 days) | Client-based | Tenn. Sup. Ct. R. 19 | On motion: 5 of past 7; UBE 270+ |
+| Texas | Yes: Tex. Disciplinary R. Prof'l Conduct 5.05(d) | Tex. Disciplinary R. Prof'l Conduct 5.05(c) (no registration) | **No general safe harbor** | Rules Governing Admission to the Bar of Texas, Rule XIX; Tex. Gov't Code § 82.0361 | On motion: 5 of past 7; UBE 270+ |
+| Utah | Yes: Utah Sup. Ct. R. Prof. Practice 3-5.5(b)(3) (eff. May 1, 2022); Utah Ethics Advisory Op. 19-03 (2019) | Utah State Bar R. 14-719 | Model Rule 5.5(c) | Utah Sup. Ct. R. 14-806 | On motion: 3 of past 5 (reciprocal); UBE 260+ |
+| Vermont | Yes: Vt. RPC 5.5, cmt. [22] | Vt. RPC 5.5(d)(1) (no registration) | Model Rule 5.5(c) | Vt. R. Admission to the Bar (pro hac vice) | On motion: 5 of past 10 (or the past 3); UBE 270+ |
+| Virginia | Yes: Va. Legal Ethics Op. 1896 (2021) | Va. Sup. Ct. R. 1A:5 | Model Rule 5.5(c) | Va. Sup. Ct. R. 1A:4 | On motion: 3 of past 5 (reciprocal) |
+| Washington | Yes: WSBA Advisory Op. 201601 (2016, amended 2022) | Wash. APR 8(f) | Model Rule 5.5(c) | Wash. APR 8(b) | On motion: 1 of past 3; UBE 260+ |
+| West Virginia | No guidance found (2026-10-01) | W. Va. R. Prof. Conduct 5.5(d)(1) (no registration) | Model Rule 5.5(c) | W. Va. Rules for Admission to the Practice of Law, Rule 8.0 | On motion: 5 of past 7 (reciprocal); UBE 270+ |
+| Wisconsin | Yes: Wis. Formal Ethics Op. EF-21-02 (2021) | Wis. SCR 10.03(4)(f) (within 60 days) | State conditions | Wis. SCR 10.03(4)(b), (d) | On motion: 3 of past 5; UBE 260+ |
+| Wyoming | No guidance found (2026-10-01) | Wyo. R. Prof. Conduct 5.5(d)(1) (no registration) | Limited: (c)(2) | Rules Governing Admission to the Practice of Law in Wyo., Rule 8 | On motion: 5 of past 7; UBE 270+ |
 
 U.S. territories fall back to the ABA Model Rule with a note that the local version may differ. Regenerate this table with `npm run coverage`.
 
-State citations were checked on 2026-09-26 and 2026-10-01 against official sources, state bars, and reliable secondary summaries (including BarReciprocity.com's state pages for in-house and pro hac vice rules). Each checked citation links to its source in the app. The few not checked show a **verify** tag.
+State citations were checked on 2026-09-26 and 2026-10-01. Most link to official sources: court rules, state bar sites, and the NCBE Comprehensive Guide to Bar Admission Requirements. State temporary-practice variations come from the ABA Center for Professional Responsibility's chart of state MJP implementation (as of April 2016), updated where later rules were found. A few citations link only to a secondary summary and are labeled "source (secondary)" in the app; a few others are marked **verify**.
 
 ## Built to run anywhere, including locked-down work environments
 

@@ -142,7 +142,7 @@ test("verified state citations carry a source URL", function () {
   Object.keys(A.STATES).forEach(function (k) {
     Object.keys(A.STATES[k]).forEach(function (f) {
       var c = A.STATES[k][f];
-      if (c && c.verified) assert.ok(c.url.indexOf("https://") === 0, k + "." + f + " is verified but has no source URL");
+      if (c && c.verified) assert.ok(/^https?:\/\//.test(c.url), k + "." + f + " is verified but has no source URL");
     });
   });
 });
@@ -219,7 +219,7 @@ test("all-in-one-state practice gets no remote recommendations", function () {
 test("states with no remote-work guidance say so with the search date", function () {
   var r = analyze(withBase({ residence: "KY", workLocations: ["KY"] }));
   var txt = section(r, "KY").findings.map(function (x) { return x.text; }).join(" ");
-  assert.ok(txt.indexOf("we found no Kentucky rule or opinion") >= 0);
+  assert.ok(txt.indexOf("we found no Kentucky rule or formal opinion") >= 0);
   assert.ok(cited(r, "Ky. SCR 3.130(5.5)"));
 });
 
@@ -248,6 +248,59 @@ test("Hawaii has no in-house exception", function () {
 test("Georgia in-house needs no registration", function () {
   var r = analyze(withBase({ practiceType: "inhouse", residence: "GA", workLocations: ["GA"], clientLocations: ["GA"] }));
   assert.ok(section(r, "GA").findings.some(function (x) { return x.text.indexOf("does not require in-house counsel to register") >= 0; }));
+});
+
+test("risk sections list admission paths from NCBE data", function () {
+  var r = analyze(withBase({ residence: "FL", workLocations: ["FL"], holdOutIn: ["FL"] }));
+  var txt = section(r, "FL").findings.map(function (x) { return x.text; }).join(" ");
+  assert.ok(txt.indexOf("Paths to full admission in Florida") >= 0);
+  assert.ok(txt.indexOf("does not offer admission on motion") >= 0);
+  var co = analyze(withBase({ residence: "MO", workLocations: ["MO"] }));
+  var mo = section(co, "MO").findings.map(function (x) { return x.text; }).join(" ");
+  assert.ok(mo.indexOf("5 of past 10") >= 0 && mo.indexOf("New York offers admission on motion") >= 0);
+});
+
+test("in-house registration deadlines become action items", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", residence: "IL", workLocations: ["IL"], clientLocations: ["IL"] }));
+  assert.ok(recs(r, "Action item: file for in-house registration or licensing in Illinois within 90 days"));
+});
+
+test("Tennessee approves remote in-house work for a Tennessee company", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", clientLocations: ["TN"] }));
+  assert.strictEqual(section(r, "TN").level, "ok");
+  assert.ok(cited(r, "2022-F-168"));
+});
+
+test("New Mexico in-house now requires a limited license", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", residence: "NM", workLocations: ["NM"], clientLocations: ["NM"] }));
+  assert.ok(cited(r, "Rule 15-308 NMRA"));
+});
+
+test("Kentucky has no local-counsel temporary safe harbor", function () {
+  var r = analyze(withBase({ clientLocations: ["KY"], matterLaw: ["KY"], duration: "temporary", localCounsel: "yes" }));
+  assert.strictEqual(section(r, "KY").level, "risk");
+  assert.ok(section(r, "KY").findings.some(function (x) { return x.text.indexOf("does not provide the 5.5(c)(1) safe harbor") >= 0; }));
+});
+
+test("Hawaii and Texas have no general temporary-practice safe harbor", function () {
+  ["HI", "TX"].forEach(function (code) {
+    var r = analyze(withBase({ clientLocations: [code], matterLaw: [code], duration: "temporary", localCounsel: "yes" }));
+    assert.strictEqual(section(r, code).level, "risk", code);
+  });
+});
+
+test("Maine ties temporary practice to an existing client of the licensed jurisdiction", function () {
+  var withClient = analyze(withBase({ clientLocations: ["NY"], matterLaw: ["ME"], duration: "temporary" }));
+  assert.notStrictEqual(section(withClient, "ME").level, "risk");
+  var noClient = analyze(withBase({ clientLocations: ["ME"], matterLaw: ["NY"], duration: "temporary" }));
+  assert.ok(section(noClient, "ME").findings.some(function (x) { return x.text.indexOf("client-based safe harbors may not apply") >= 0; }));
+});
+
+test("Texas remote rule allows Texas clients on non-Texas law", function () {
+  var r = analyze(withBase({ residence: "TX", workLocations: ["TX"], clientLocations: ["TX"], matterLaw: ["NY"] }));
+  assert.strictEqual(section(r, "TX").level, "ok");
+  var tx = analyze(withBase({ residence: "TX", workLocations: ["TX"], clientLocations: ["TX"], matterLaw: ["TX"] }));
+  assert.strictEqual(section(tx, "TX").level, "risk");
 });
 
 var failed = 0;

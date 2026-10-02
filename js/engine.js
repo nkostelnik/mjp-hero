@@ -24,12 +24,13 @@
  * }
  */
 (function (root) {
-  var J, A;
+  var J, A, AD;
   if (typeof module !== "undefined" && module.exports) {
     J = require("./jurisdictions.js");
     A = require("./authorities.js");
+    AD = require("./admission.js");
   } else {
-    J = root.MJP; A = root.MJP;
+    J = root.MJP; A = root.MJP; AD = root.MJP;
   }
 
   var RANK = { info: 0, ok: 1, caution: 2, risk: 3 };
@@ -45,7 +46,7 @@
     var s = A.STATES[code];
     if (!s || !s[field]) return null;
     var c = s[field];
-    return { cite: c.cite, text: c.text, verified: c.verified, checked: c.checked, url: c.url, source: "state", noRegistration: c.noRegistration, noInHouseException: c.noInHouseException, level: c.level };
+    return Object.assign({}, c, { source: "state" });
   }
   function cites() {
     return Array.prototype.slice.call(arguments).filter(Boolean);
@@ -152,8 +153,49 @@
     ).filter(function (c) { return c && c !== "FOREIGN" && c !== "FED" && c !== "MULTI" && !isLic(c); });
 
     targets.forEach(function (code) {
-      sections.push(analyzeUnlicensed(code));
+      var sec = analyzeUnlicensed(code);
+      if (maxLevel(sec.findings) === "risk") {
+        var path = admissionPath(code);
+        if (path) sec.findings.push(path);
+      }
+      sections.push(sec);
     });
+
+    // How a lawyer could become fully admitted in a jurisdiction, from NCBE data.
+    function admissionPath(code) {
+      var ad = AD.ADMISSION && AD.ADMISSION[code];
+      if (!ad) return null;
+      var name = J.nameOf(code);
+      var parts = [];
+      var src = [];
+      var ncbe = function (key, label) {
+        return { cite: "NCBE Comprehensive Guide to Bar Admission Requirements, " + label, text: "", verified: true, checked: AD.ADMISSION_CHECKED, url: AD.ADMISSION_SOURCES[key], source: "state", official: true };
+      };
+      if (ad.aom === "yes") {
+        var t = "Admission on motion is available with " + ad.years + " years of practice.";
+        if (ad.recip) {
+          var homeOffers = inp.licensed.filter(function (c) { return AD.ADMISSION[c] && AD.ADMISSION[c].aom === "yes"; });
+          t += " " + name + " limits it to lawyers from jurisdictions that offer the same to " + name + " lawyers" +
+            (homeOffers.length ? "; " + list(homeOffers) + " offers admission on motion, so confirm it is on " + name + "'s reciprocal list." :
+              "; none of your licensing jurisdictions offers admission on motion, so this path is likely closed to you.");
+        }
+        parts.push(t);
+        src.push(ncbe("aom", "Chart 14 (admission on motion)"));
+        if (ad.recip !== false) src.push(ncbe("recip", "Chart 15 (reciprocity)"));
+      } else if (ad.aom === "limited") {
+        parts.push(name + " offers admission on motion only for narrow categories of lawyers.");
+        src.push(ncbe("aom", "Chart 14 (admission on motion)"));
+      } else {
+        parts.push(name + " does not offer admission on motion.");
+        src.push(ncbe("aom", "Chart 14 (admission on motion)"));
+      }
+      if (ad.ube) {
+        parts.push("A transferred Uniform Bar Exam score of at least " + ad.ube.min + ", no older than " + ad.ube.age + ", is accepted.");
+        src.push(ncbe("ube", "Chart 5 (UBE score transfer)"));
+      }
+      if (ad.aom !== "yes" && !ad.ube) parts.push("Full admission requires passing " + name + "'s bar exam.");
+      return f("info", "Paths to full admission in " + name + ": " + parts.join(" "), src);
+    }
 
     function analyzeUnlicensed(code) {
       var name = J.nameOf(code);
@@ -205,7 +247,7 @@
           }
         } else if (pt === "government") {
           fs.push(f("caution", "Government lawyers are often covered when federal or other law authorizes the work in " + name + ". Confirm the specific authority for your position.", cites(aba("5.5(d)(2)"))));
-        } else if (!isClient && !lawHere && !held) {
+        } else if ((!isClient || (st(code, "remote") && st(code, "remote").localClientsOk)) && !lawHere && !held) {
           var remote = st(code, "remote");
           var remoteNarrow = remote && remote.level === "caution";
           if (remote && remote.level === "risk") {
@@ -216,9 +258,9 @@
             "Working remotely from " + name + " on matters for your licensed jurisdiction, with no local office, advertising, or holding out, is generally permitted under ABA Op. 495" +
             (remoteNarrow ? ", but " + name + "'s own guidance is narrower. Check its conditions before relying on it." :
               remote ? ", and " + name + " has issued consistent guidance." :
-              (A.STATES[code] && A.STATES[code].remoteNone ? ". As of " + A.STATES[code].remoteNone + " we found no " + name + " rule or opinion on remote work from " + name + ", so ABA Op. 495 is persuasive but not binding there." :
+              (A.STATES[code] && A.STATES[code].remoteNone ? ". As of " + A.STATES[code].remoteNone + " we found no " + name + " rule or formal opinion on remote work from " + name + ", so ABA Op. 495 is persuasive but not binding there." + (st(code, "remoteNote") ? " " + st(code, "remoteNote").text : "") :
               ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view.")),
-            cites(aba("Op 495"), aba("Op 498"), aba("5.5(b)(1)"), remote)));
+            cites(aba("Op 495"), aba("Op 498"), aba("5.5(b)(1)"), remote, st(code, "remoteNote"))));
           if (A.STATES[code] && A.STATES[code].clientNotice && !(remote && remote.level === "risk")) {
             fs.push(f("caution", name + " requires you to tell each client that you are not licensed in " + name + ".", cites(remote)));
           }
@@ -234,7 +276,11 @@
       // Not physically here, but the client or the law is here
       if (!present && (isClient || lawHere)) {
         var vih = st(code, "virtualInHouse");
-        if (pt === "inhouse" && vih && isClient) {
+        if (pt === "inhouse" && vih && isClient && vih.level === "ok") {
+          fs.push(f("ok", vih.text, cites(vih, aba("5.5(d)(1)"))));
+        } else if (pt === "inhouse" && vih && isClient && vih.level === "caution") {
+          fs.push(f("caution", vih.text, cites(vih, aba("5.5(d)(1)"))));
+        } else if (pt === "inhouse" && vih && isClient) {
           fs.push(f("risk", name + " requires a license even for in-house lawyers who serve a " + name + " company remotely from another state. " + vih.text, cites(vih, st(code, "inHouse"), aba("5.5 cmt4"))));
         } else if (pt === "inhouse" && st(code, "inHouse") && st(code, "inHouse").noInHouseException) {
           fs.push(f("caution", name + " has no in-house exception, so advising a " + name + " employer can require " + name + " admission even from outside " + name + ".", cites(st(code, "inHouse"), aba("5.5 cmt4"))));
@@ -295,18 +341,29 @@
         fs.push(f("risk", "Temporary practice in " + name + " is unavailable while you are disbarred or suspended anywhere.", cites(aba("5.5(c)"))));
         return;
       }
-      var harbors = [];
-      if (inp.localCounsel === "yes") harbors.push(aba("5.5(c)(1)"));
-      if (inp.proceeding === "court" && (inp.phv === "admitted" || inp.phv === "will_seek" || inp.localCounsel === "yes")) harbors.push(aba("5.5(c)(2)"));
-      if (inp.proceeding === "adr" && homeRelated) harbors.push(aba("5.5(c)(3)"));
-      if (homeRelated) harbors.push(aba("5.5(c)(4)"));
       var temp = st(code, "temp");
+      // Some states tie (c)(3) and (c)(4) to representing a client of the lawyer's admitted jurisdiction.
+      var related = temp && temp.clientBased ? clients.some(isLic) : homeRelated;
+      var harbors = [];
+      if (inp.localCounsel === "yes") harbors.push({ id: "c1", c: aba("5.5(c)(1)") });
+      if (inp.proceeding === "court" && (inp.phv === "admitted" || inp.phv === "will_seek" || inp.localCounsel === "yes")) harbors.push({ id: "c2", c: aba("5.5(c)(2)") });
+      if (inp.proceeding === "adr" && related) harbors.push({ id: "c3", c: aba("5.5(c)(3)") });
+      if (related) harbors.push({ id: "c4", c: aba("5.5(c)(4)") });
+      var allowed = temp && Array.isArray(temp.harbors) ? temp.harbors : null;
+      var dropped = allowed ? harbors.filter(function (h) { return allowed.indexOf(h.id) < 0; }) : [];
+      if (allowed) harbors = harbors.filter(function (h) { return allowed.indexOf(h.id) >= 0; });
+      var stateNote = temp ? " " + temp.text : "";
+      if (dropped.length) stateNote += " " + name + " does not provide the " + dropped.map(function (h) { return h.c.cite.replace("ABA Model Rule ", ""); }).join(" or ") + " safe harbor.";
+      if (temp && temp.clientBased && homeRelated && !related) stateNote += " Because no client is located in a jurisdiction where you are licensed, the client-based safe harbors may not apply.";
+      if (A.STATES[code] && A.STATES[code].clientNotice) stateNote += " " + name + " also requires telling clients you are not licensed there.";
       if (harbors.length) {
-        fs.push(f("caution", "Temporary work touching " + name + " can fit " + harbors.map(function (h) { return h.cite.replace("ABA Model Rule ", ""); }).join(", ") +
-          ", if the facts match the conditions listed in the citations." + (temp ? " " + name + " implements temporary practice through its own rules; check them." : ""),
-          harbors.concat(cites(temp))));
+        fs.push(f("caution", "Temporary work touching " + name + " can fit " + harbors.map(function (h) { return h.c.cite.replace("ABA Model Rule ", ""); }).join(", ") +
+          ", if the facts match the conditions listed in the citations." + stateNote,
+          harbors.map(function (h) { return h.c; }).concat(cites(temp))));
+      } else if (allowed && allowed.length === 0) {
+        fs.push(f("risk", name + " has no general temporary-practice safe harbor." + stateNote, cites(temp, aba("5.5(c)"))));
       } else {
-        fs.push(f("risk", "No temporary-practice safe harbor appears to apply: no local co-counsel, no authorized court appearance, and the work does not clearly arise from your licensed-jurisdiction practice.", cites(aba("5.5(c)"), temp)));
+        fs.push(f("risk", "No temporary-practice safe harbor appears to apply: no local co-counsel, no authorized court appearance, and the work does not clearly arise from your licensed-jurisdiction practice." + stateNote, cites(aba("5.5(c)"), temp)));
       }
     }
 
@@ -344,7 +401,13 @@
       recs.push("Keep the admission-limit statement on your website, bio, letterhead, and email signature, and avoid listing a " + list(unlicPhys) + " address as an office.");
     }
     if (inp.practiceType === "inhouse" && unlicPhys.length) {
-      recs.push("Check in-house registration requirements and deadlines in " + list(unlicPhys) + "; some states impose deadlines measured from when you start working there.");
+      var dated = unlicPhys.filter(function (c) { var r = st(c, "inHouse"); return r && r.deadline; });
+      dated.forEach(function (c) {
+        var r = st(c, "inHouse");
+        recs.push("Action item: file for in-house registration or licensing in " + J.nameOf(c) + " within " + r.deadline + " of starting work there (" + r.cite + ").");
+      });
+      var undated = unlicPhys.filter(function (c) { return dated.indexOf(c) < 0; });
+      if (undated.length) recs.push("Check in-house registration requirements and deadlines in " + list(undated) + "; some states measure deadlines from when you start working there.");
     }
     var invisibleOk = unlicPhys.filter(function (c) { var r = st(c, "remote"); return !(r && r.level === "risk"); });
     if (unlicPhys.length && (inp.practiceType === "private" || inp.practiceType === "fractional")) {
