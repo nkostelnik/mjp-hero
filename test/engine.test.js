@@ -29,8 +29,8 @@ test("remote from Florida on NY matters is ok with Florida authority", function 
 });
 
 test("remote from a state without data is caution", function () {
-  var r = analyze(withBase({ residence: "CO", workLocations: ["CO"] }));
-  assert.strictEqual(section(r, "CO").level, "caution");
+  var r = analyze(withBase({ residence: "KY", workLocations: ["KY"] }));
+  assert.strictEqual(section(r, "KY").level, "caution");
 });
 
 test("office in unlicensed state is risk", function () {
@@ -170,6 +170,50 @@ test("fractional counsel is analyzed as outside counsel, not in-house", function
   assert.ok(cited(r, "88-356"));
   var inhouse = analyze(withBase({ practiceType: "inhouse", residence: "FL", workLocations: ["FL"], clientLocations: ["FL"], matterLaw: ["FL"] }));
   assert.strictEqual(section(inhouse, "FL").level, "caution");
+});
+
+function recs(r, text) { return r.recommendations.some(function (x) { return x.indexOf(text) >= 0; }); }
+
+test("Missouri rejects Op. 495: remote work from Missouri is risk", function () {
+  var r = analyze(withBase({ residence: "MO", workLocations: ["MO"] }));
+  assert.strictEqual(section(r, "MO").level, "risk");
+  assert.ok(cited(r, "2024-03"));
+});
+
+test("Missouri: in-house lawyer serving a Missouri company remotely is risk", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", clientLocations: ["MO"] }));
+  assert.strictEqual(section(r, "MO").level, "risk");
+  assert.ok(cited(r, "2024-02"));
+});
+
+test("Minnesota remote work is ok but requires client notice", function () {
+  var r = analyze(withBase({ residence: "MN", workLocations: ["MN"] }));
+  assert.strictEqual(section(r, "MN").level, "caution");
+  assert.ok(recs(r, "not licensed in Minnesota"));
+});
+
+test("licensing state's own remote guidance appears when working elsewhere", function () {
+  var r = analyze(Object.assign({}, base, { licensed: ["IL"], clientLocations: ["IL"], matterLaw: ["IL"], residence: "UT", workLocations: ["UT"] }));
+  assert.ok(cited(r, "ISBA Advisory Op. 22-03"));
+  assert.strictEqual(section(r, "UT").level, "ok");
+});
+
+test("Washington lawyer living elsewhere gets resident-agent flag", function () {
+  var r = analyze(Object.assign({}, base, { licensed: ["WA"], clientLocations: ["WA"], matterLaw: ["WA"], residence: "OR", workLocations: ["OR"] }));
+  assert.ok(section(r, "WA").findings.some(function (x) { return x.text.indexOf("resident agent") >= 0; }));
+});
+
+test("Op. 495, 498, and 504 recommendations appear for remote work", function () {
+  var r = analyze(withBase({ residence: "FL", workLocations: ["FL"] }));
+  assert.ok(recs(r, "by appointment only"));
+  assert.ok(recs(r, "ABA Op. 498"));
+  assert.ok(recs(r, "ABA Op. 504"));
+  assert.ok(cited(r, "Formal Op. 504"));
+});
+
+test("all-in-one-state practice gets no remote recommendations", function () {
+  var r = analyze(base);
+  assert.ok(!recs(r, "ABA Op. 498") && !recs(r, "ABA Op. 504"));
 });
 
 var failed = 0;

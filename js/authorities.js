@@ -78,15 +78,23 @@
     },
     "Op 495": {
       cite: "ABA Formal Op. 495 (2020), Lawyers Working Remotely",
-      text: "A lawyer may practice the law of a jurisdiction where the lawyer is licensed while physically located in a jurisdiction where the lawyer is not licensed, if the local jurisdiction has not said otherwise and the lawyer does not hold out as admitted there, advertise or offer services there, or establish a local office."
+      text: "A lawyer may practice the law the lawyer's licensing jurisdiction authorizes (including temporary practice and other law permitted by Rule 5.5(c) and (d)) while physically in a jurisdiction where the lawyer is not licensed, if that jurisdiction has not determined otherwise and the lawyer is \"for all intents and purposes invisible as a lawyer\" there: no local address on websites, letterhead, business cards, or advertising; no holding out as locally admitted; and no legal services for matters subject to the local jurisdiction. The opinion suggests listing the licensing-jurisdiction address with a note such as \"by appointment only\" or \"for mail delivery.\"",
+      url: "https://www.lawnext.com/wp-content/uploads/2021/09/aba-formal-opinion-495.pdf"
     },
     "Op 498": {
       cite: "ABA Formal Op. 498 (2021), Virtual Practice",
-      text: "Virtual practice is permitted but carries duties of competence, confidentiality, and supervision, and does not relax the jurisdictional limits of Rule 5.5."
+      text: "Virtual practice is permitted but does not relax Rule 5.5. Lawyers must keep up with technology risks (Rule 1.1), protect confidential information (Rule 1.6) with strong passwords, security updates, secure Wi-Fi, vetted vendors, secure storage of recordings, and smart speakers or assistants disabled during client work, and supervise lawyers and staff working remotely (Rules 5.1, 5.3). It suggests discussing technology use in the engagement letter.",
+      url: "https://www.hklaw.com/en/insights/publications/2021/03/aba-offers-general-guidance-for-virtual-law-practices"
+    },
+    "Op 504": {
+      cite: "ABA Formal Op. 504 (2023), Choice of Rule",
+      text: "Explains Rule 8.5(b). Before a tribunal, the tribunal's rules apply. Otherwise, look to where the conduct's predominant effect is, considering the client's location, where the transaction occurs, which law governs, the lawyer's principal office and admission, where other parties are, and which jurisdiction has the greatest interest. Rule 8.5(b)'s safe harbor protects a lawyer who reasonably relies on one jurisdiction as the predominant-effect jurisdiction.",
+      url: "https://lalegalethics.org/aba-issues-opinion-on-model-rule-8-5-choice-of-law/"
     },
     "Op 88-356": {
       cite: "ABA Formal Op. 88-356 (1988), Temporary Lawyers",
-      text: "Lawyers placed with firms or clients through a placement agency raise conflict-of-interest, confidentiality, and fee-arrangement questions. Whether the lawyer is associated with the firm or client depends on a functional analysis of the relationship."
+      text: "Lawyers placed with firms or clients through a placement agency raise conflict-of-interest, confidentiality, and fee-arrangement questions. Whether the lawyer is associated with the firm or client depends on a functional analysis of the relationship.",
+      url: "https://www.americanbar.org/products/ecd/chapter/219921/"
     },
     "Sperry": {
       cite: "Sperry v. Florida ex rel. Florida Bar, 373 U.S. 379 (1963)",
@@ -105,12 +113,21 @@
    *   remote    guidance on remote work from within the state for out-of-state matters
    *             (level: "caution" when the guidance is narrower than ABA Op. 495)
    *   residency requirements on licensed lawyers who live elsewhere
+   *   away     the state's own guidance that its licensed lawyers may practice its law from elsewhere
+   *   virtualInHouse  authority requiring a local license for in-house lawyers who serve a company
+   *            in this state remotely from another state
+   *   clientNotice    true if the state requires telling clients the lawyer is not licensed there
+   *
+   * remote.level: "ok" (default), "caution" (narrower than Op. 495), or "risk" (state says remote
+   * practice from the state is unauthorized).
    *   notes     extra warnings (strings)
    *
    * v(...) marks a citation confirmed against the source URL on the date in CHECKED.
    * u(...) marks one not yet confirmed; the UI shows a "verify" tag on these.
    */
   var CHECKED = "2026-09-26";
+  // Mass. Board of Bar Overseers survey of remote-practice rules in New England states (updated Mar. 2024).
+  var MASS_BBO = "https://bbopublic.massbbo.org/web/f/(UpdatedMarch%202024)%20What%20you%20should%20know%20about%20Cross%20Border%20Remote%20Practice.pdf";
   function v(cite, text, source, extra) {
     return Object.assign({ cite: cite, text: text || "", verified: true, checked: CHECKED, url: source || "" }, extra || {});
   }
@@ -153,6 +170,7 @@
     },
     IL: {
       rule: v("Ill. R. Prof'l Conduct 5.5", "", "https://www.isba.org/ethics/irpc/rule55"),
+      away: v("ISBA Advisory Op. 22-03 (2022)", "Illinois-licensed lawyers may practice Illinois law remotely from a jurisdiction where they are not licensed, if that jurisdiction does not prohibit it.", "https://www.isba.org/sites/default/files/ethicsopinions/Advisory%20Opinion%2022-03.pdf"),
       inHouse: v("Ill. S. Ct. R. 716 (amended eff. Jan. 1, 2026)", "Limited license for house counsel employed exclusively by a single entity and its affiliates.", "https://www.ilbaradmissions.org/appinfo.action?id=4"),
       phv: v("Ill. S. Ct. R. 707", "An out-of-state attorney may appear in a particular Illinois proceeding after an Illinois attorney files an appearance and a verified statement is filed with the ARDC.", "https://registration.iardc.org/attyreg/Registration/regdept/popup_rule707overview.aspx")
     },
@@ -169,6 +187,7 @@
     },
     PA: {
       rule: u("Pa. R. Prof'l Conduct 5.5"),
+      away: v("Pa. Bar Ass'n & Phila. Bar Ass'n Joint Formal Op. 2021-100", "Pennsylvania-licensed lawyers may practice Pennsylvania law remotely from another jurisdiction if they take appropriate steps, including not holding out a local office, and the other jurisdiction does not prohibit it.", "https://www.lawnext.com/2021/03/the-ethics-of-working-from-outside-your-state-pa-bars-adopt-aba-rule.html"),
       phv: v("Pa. Bar Admission R. 301", "Pro hac vice requires a Pennsylvania attorney who agrees to act as attorney of record.", "https://www.pabarexam.org/bar_admission_rules/301.htm"),
       inHouse: v("Pa. Bar Admission R. 302", "Limited In-House Corporate Counsel License required for in-house lawyers working in Pennsylvania on more than a temporary basis or with an office or systematic presence there.", "https://www.pabarexam.org/bar_admission_rules/302.htm")
     },
@@ -182,6 +201,65 @@
       phv: v("Va. Sup. Ct. R. 1A:4", "Out-of-state lawyers may apply to appear pro hac vice in a particular case before a Virginia court, board, or agency.", "https://www.vacourts.gov/static/courts/scv/forms/pro_hac_vice_rule_inst.pdf"),
       inHouse: v("Va. Sup. Ct. R. 1A:5", "Corporate counsel must be a Virginia State Bar member, hold a Corporate Counsel Certificate, or register under Part II of the rule.", "https://barexam.virginia.gov/vcc-rule1A-5"),
       remote: v("Va. Legal Ethics Op. 1896 (2021)", "A lawyer not licensed in Virginia may work from Virginia, even continuously, if the practice is limited to federal law or the law of the lawyer's licensing jurisdiction, with disclosure of the lack of a Virginia license where needed.", "https://www.vacourts.gov/static/courts/scv/amendments/leo_1896.pdf")
+    },
+    // Jurisdictions below have remote-work guidance only; the rest of their rules fall back to the ABA baseline.
+    MO: {
+      inHouse: v("Mo. S. Ct. R. 8.105", "Limited license for lawyers not admitted in Missouri who serve their employer or its affiliates.", "https://mo-legal-ethics.org/informal-opinion/2024-02/"),
+      remote: v("Mo. Informal Advisory Op. 2024-03 (2024)", "A lawyer licensed elsewhere who lives in Missouri and works from a Missouri home office for an out-of-state firm is establishing a systematic and continuous presence and must seek Missouri admission.", "https://mo-legal-ethics.org/informal-opinion/2024-03/", { level: "risk" }),
+      virtualInHouse: v("Mo. Informal Advisory Op. 2024-02 (2024)", "A lawyer licensed elsewhere who works virtually from another state for a corporation located in Missouri must seek Missouri admission (for example, a Rule 8.105 limited license), because presence can be systematic and continuous without being physically in Missouri.", "https://mo-legal-ethics.org/informal-opinion/2024-02/")
+    },
+    CO: {
+      remote: v("Colo. RPC 5.5, cmt. [1] (amended Feb. 2024); C.R.C.P. 205.1", "Lawyers physically in Colorado who provide services under another jurisdiction's authority do not violate Rule 5.5 if they do not solicit or accept clients in Colorado for services performed in Colorado and do not hold out as authorized in Colorado. Colorado regulators caution that working for a Colorado law firm with a Colorado office likely requires a Colorado license unless the practice is exclusively federal or tribal law.", "https://cl.cobar.org/departments/practicing-from-a-remote-jurisdiction/")
+    },
+    OH: {
+      remote: v("Ohio Prof. Cond. R. 5.5(d)(4) (eff. Sept. 1, 2021)", "Lawyers admitted elsewhere may practice their licensing jurisdiction's law remotely from Ohio if they do not solicit Ohio clients, appear in Ohio courts, or hold out as Ohio-admitted. If any Ohio location appears on letterhead, cards, websites, advertising, fee agreements, or signage, they must affirmatively state they are not admitted in Ohio.", "https://www.oblic.com/resources/oblic-news/09/07/2021/rule-5-5-amendments-allow-remote-practice/")
+    },
+    NC: {
+      remote: v("N.C. RPC 5.5; N.C. State Bar, \"Home is Where the Heart Is\" (2021)", "Lawyers licensed elsewhere may work remotely from North Carolina for their own jurisdiction's clients if they do not suggest they are licensed in North Carolina and protect client confidentiality.", "https://www.ncbar.gov/for-lawyers/ethics/ethics-articles/home-is-where-the-heart-is/")
+    },
+    MN: {
+      remote: v("Minn. RPC 5.5(d)", "Lawyers admitted elsewhere may provide services in Minnesota that exclusively involve federal law, tribal law, or the law of a jurisdiction where they are licensed, but must advise each client that they are not licensed in Minnesota.", "https://www.revisor.mn.gov/court_rules/pr/subtype/cond/id/5.5/"),
+      clientNotice: true
+    },
+    AZ: {
+      remote: u("Ariz. ER 5.5(d)", "Lawyers admitted elsewhere may provide services in Arizona that exclusively involve federal law, another jurisdiction's law, or tribal law, but must advise clients they are not admitted in Arizona and obtain informed consent."),
+      clientNotice: true
+    },
+    CT: {
+      remote: v("Conn. RPC 5.5(f); Conn. Practice Book § 2-44A(c) (eff. Jan. 1, 2023)", "Remote practice from Connecticut that is authorized by a jurisdiction where the lawyer is admitted is not the practice of law in Connecticut. It does not allow holding out as authorized in Connecticut or serving Connecticut clients.", "https://www.jud.ct.gov/lawjournal/Docs/Misc/2022/29/pblj_8402.pdf")
+    },
+    NH: {
+      remote: v("N.H. RPC 5.5(d) & Ethics Committee cmt. 3", "Lawyers licensed elsewhere who do not practice New Hampshire law need not obtain a New Hampshire license merely because they are physically in New Hampshire, if they do not hold out as admitted there.", "https://www.nhbar.org/working-remotely-under-nh-rule-5-5/")
+    },
+    VT: {
+      remote: v("Vt. RPC 5.5, cmt. [22]", "Vermont added a comment expressly adopting ABA Op. 495 for remote practice from Vermont.", MASS_BBO)
+    },
+    RI: {
+      remote: v("R.I. RPC 5.5, cmt. [4]", "Lawyers not licensed in Rhode Island may work from a Rhode Island home under conditions, but may not hold in-person meetings in Rhode Island with clients or third parties unless another exception applies.", MASS_BBO)
+    },
+    ME: {
+      remote: v("Me. Prof. Ethics Comm'n Op. 189 (2005)", "A lawyer who lives in Maine and works from home for an out-of-state firm and out-of-state clients, without a Maine office or holding out, is not engaged in unauthorized practice.", MASS_BBO)
+    },
+    UT: {
+      remote: v("Utah Ethics Advisory Op. 19-03 (2019)", "An out-of-state lawyer may represent clients from the licensing state from a private home in Utah, but must not establish a public office in Utah or solicit Utah business.", "https://www.utahbar.org/ethics-opinions/19-03/")
+    },
+    SC: {
+      remote: v("S.C. RPC 5.5, cmt. [4] (amended Mar. 15, 2023)", "Remote work in South Carolina does not establish an office or systematic presence if the lawyer's services are limited to those authorized by a jurisdiction where the lawyer is admitted and the lawyer does not state, imply, or hold out that the lawyer is a South Carolina lawyer.", "https://www.sccourts.org/opinions-orders/court-orders/order-detail/?order=2023-03-15-02")
+    },
+    HI: {
+      remote: v("Haw. RPC 5.5, cmt. [3] (eff. July 1, 2022)", "Lawyers licensed elsewhere may remotely practice that jurisdiction's law while in Hawaii if they do not hold out as licensed in Hawaii, advertise a Hawaii office, provide or offer Hawaii legal services, or do anything connected to practice in Hawaii beyond being physically present.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf"),
+      away: v("Haw. RPC 5.5, cmt. [3]", "Hawaii-licensed lawyers may practice remotely from outside Hawaii if the jurisdiction where they are physically present does not prohibit it.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf")
+    },
+    MI: {
+      remote: v("Mich. Ethics Op. RI-382 (2021)", "An out-of-state lawyer physically located in Michigan but practicing exclusively the law of a jurisdiction where the lawyer is licensed does not violate Michigan Rule 5.5.", "https://www.michbar.org/opinions/ethics/numbered_opinions/RI-382")
+    },
+    WI: {
+      remote: v("Wis. Formal Ethics Op. EF-21-02 (2021)", "Wisconsin's rule does not prohibit an out-of-state lawyer from representing clients of the licensing state from a private location in Wisconsin.", "https://www.wisbar.org/NewsPublications/WisconsinLawyer/Pages/Article.aspx?ArticleID=28330")
+    },
+    WA: {
+      remote: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Out-of-state lawyers may generally practice remotely from Washington if they limit their work to their licensing jurisdictions and do not hold out as available to practice in Washington.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
+      residency: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington does not require a physical office, but an active Washington lawyer who lives outside Washington must file the name and street address of a resident agent in Washington with the WSBA.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
+      away: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington-licensed lawyers may practice from a home office in another state, but should confirm their presence there is not unauthorized practice under that state's rules.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4")
     }
   };
 

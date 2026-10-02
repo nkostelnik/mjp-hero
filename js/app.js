@@ -110,6 +110,7 @@
 
   // Tag for a state citation: "verify" if unchecked, or a link to the source it was checked against.
   function stateTag(c) {
+    if (c.source === "aba" && c.url) return el("a", { class: "src", href: c.url, target: "_blank", rel: "noopener noreferrer", text: "source" });
     if (c.source !== "state") return null;
     if (c.verified === false) return el("span", { class: "verify", text: "verify" });
     if (c.url) return el("a", { class: "src", href: c.url, target: "_blank", rel: "noopener noreferrer", title: "Checked " + (c.checked || ""), text: "source" });

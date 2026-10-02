@@ -40,7 +40,7 @@
     return out;
   }
 
-  function aba(key) { return { cite: A.ABA[key].cite, text: A.ABA[key].text, source: "aba" }; }
+  function aba(key) { return { cite: A.ABA[key].cite, text: A.ABA[key].text, url: A.ABA[key].url, source: "aba" }; }
   function st(code, field) {
     var s = A.STATES[code];
     if (!s || !s[field]) return null;
@@ -105,7 +105,7 @@
     if (inp.proceeding === "court" && inp.proceedingIn) {
       ov.push(f("info", "Conduct connected with the court matter is generally governed by the rules of the jurisdiction where the tribunal sits (" + J.nameOf(inp.proceedingIn) + ").", cites(aba("8.5(b)(1)"))));
     } else if (usPhys.length) {
-      ov.push(f("info", "For conduct outside a tribunal, the governing rules are generally those of where you act (" + list(usPhys) + "), unless the predominant effect of your conduct is elsewhere, such as where the client is.", cites(aba("8.5(b)(2)"))));
+      ov.push(f("info", "For conduct outside a tribunal, the governing rules are generally those of where you act (" + list(usPhys) + "), unless the predominant effect of your conduct is elsewhere. ABA Op. 504 lists factors for finding the predominant effect: where the client is, where the transaction occurs, which law governs, your principal office and admissions, where other parties are, and which jurisdiction has the greatest interest.", cites(aba("8.5(b)(2)"), aba("Op 504"))));
     }
     var foreignLaw = lawStates.filter(function (c) { return !isLic(c); });
     if (foreignLaw.length) {
@@ -134,6 +134,11 @@
       var touched = usPhys.indexOf(code) >= 0 || clients.indexOf(code) >= 0 || law.indexOf(code) >= 0 ||
         inp.proceedingIn === code;
       if (touched) fs.push(f("ok", "You are licensed here, so Rule 5.5 does not limit your practice in " + J.nameOf(code) + ".", []));
+      var away = st(code, "away");
+      var outside = usPhys.filter(function (c) { return !isLic(c); }).concat(phys.indexOf("FOREIGN") >= 0 ? ["FOREIGN"] : []);
+      if (away && outside.length) {
+        fs.push(f("ok", "On working from " + list(outside) + ", " + J.nameOf(code) + "'s own guidance agrees: " + away.text, cites(away)));
+      }
       var res = st(code, "residency");
       if (res && inp.residence && inp.residence !== code) {
         fs.push(f("caution", "You are licensed in " + J.nameOf(code) + " but live elsewhere. " + res.text, cites(res)));
@@ -164,7 +169,7 @@
       if (rule) {
         fs.push(f("info", name + "'s adopted rule governs here, not the Model Rule." + (rule.text ? " " + rule.text : ""), cites(rule, st(code, "upl"))));
       } else {
-        fs.push(f("info", "This tool has no " + name + "-specific data yet. " + name + "'s adopted version of Rule 5.5 and its court rules may differ from the ABA Model Rule used below.", cites(aba("5.5(a)"))));
+        fs.push(f("info", (A.STATES[code] ? "This tool covers " + name + "'s remote-work and related guidance but not its full rule set. " : "This tool has no " + name + "-specific data yet. ") + name + "'s adopted version of Rule 5.5 and its court rules may differ from the ABA Model Rule used below.", cites(aba("5.5(a)"))));
       }
 
       // Holding out
@@ -200,12 +205,19 @@
         } else if (!isClient && !lawHere && !held) {
           var remote = st(code, "remote");
           var remoteNarrow = remote && remote.level === "caution";
+          if (remote && remote.level === "risk") {
+            fs.push(f("risk", name + " has rejected the ABA Op. 495 approach. Working from " + name + " on an ongoing basis, even only on your licensed jurisdiction's matters, requires " + name + " admission unless another exception applies. " + remote.text,
+              cites(remote, aba("Op 495"), aba("5.5(b)(1)"))));
+          } else
           fs.push(f(remote && !remoteNarrow ? "ok" : "caution",
             "Working remotely from " + name + " on matters for your licensed jurisdiction, with no local office, advertising, or holding out, is generally permitted under ABA Op. 495" +
             (remoteNarrow ? ", but " + name + "'s own guidance is narrower. Check its conditions before relying on it." :
               remote ? ", and " + name + " has issued consistent guidance." :
               ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view."),
             cites(aba("Op 495"), aba("Op 498"), aba("5.5(b)(1)"), remote)));
+          if (A.STATES[code] && A.STATES[code].clientNotice && !(remote && remote.level === "risk")) {
+            fs.push(f("caution", name + " requires you to tell each client that you are not licensed in " + name + ".", cites(remote)));
+          }
         } else if (inp.duration === "ongoing") {
           fs.push(f("risk", "Working from " + name + " on an ongoing basis for " + (isClient ? name + " clients" : "") + (isClient && lawHere ? " and " : "") + (lawHere ? name + " law matters" : "") +
             " is the systematic and continuous local presence Rule 5.5(b)(1) prohibits, and it falls outside ABA Op. 495.",
@@ -217,7 +229,10 @@
 
       // Not physically here, but the client or the law is here
       if (!present && (isClient || lawHere)) {
-        if (pt === "inhouse") {
+        var vih = st(code, "virtualInHouse");
+        if (pt === "inhouse" && vih && isClient) {
+          fs.push(f("risk", name + " requires a license even for in-house lawyers who serve a " + name + " company remotely from another state. " + vih.text, cites(vih, st(code, "inHouse"), aba("5.5 cmt4"))));
+        } else if (pt === "inhouse") {
           fs.push(f("ok", "Advising your employer or its affiliates located in " + name + " is within the in-house exception.", cites(aba("5.5(d)(1)"))));
         } else if (pt === "federal" && !lawHere) {
           fs.push(f("ok", "Federally authorized practice for a client in " + name + " is generally permitted.", cites(aba("5.5(d)(2)"))));
@@ -325,8 +340,21 @@
     if (inp.practiceType === "inhouse" && unlicPhys.length) {
       recs.push("Check in-house registration requirements and deadlines in " + list(unlicPhys) + "; some states impose deadlines measured from when you start working there.");
     }
+    var invisibleOk = unlicPhys.filter(function (c) { var r = st(c, "remote"); return !(r && r.level === "risk"); });
     if (unlicPhys.length && (inp.practiceType === "private" || inp.practiceType === "fractional")) {
       recs.push("Keep the work tied to your licensed jurisdiction's law or federal law, and decline or refer matters that are really about local law for local clients.");
+      if (invisibleOk.length) recs.push("Stay \"invisible as a lawyer\" in " + list(invisibleOk) + " (ABA Op. 495): no local address on your website, letterhead, cards, directory profiles, or ads. If you list an address in your licensed state where you are not regularly present, mark it \"by appointment only\" or \"for mail delivery.\"");
+    }
+    var noticeStates = unlicPhys.filter(function (c) { return A.STATES[c] && A.STATES[c].clientNotice; });
+    if (noticeStates.length) {
+      recs.push("Tell each client in writing, for example in your engagement letter, that you are not licensed in " + list(noticeStates) + ".");
+    }
+    var remoteWork = unlicPhys.length || clients.some(function (c) { return c !== "FOREIGN" && usPhys.indexOf(c) < 0; });
+    if (remoteWork) {
+      recs.push("For remote or virtual work, follow ABA Op. 498: use strong passwords and current security updates, secure your home Wi-Fi, vet vendors' confidentiality terms, store meeting recordings securely, turn off smart speakers and voice assistants during client work, supervise anyone working remotely for you, and describe your technology use in the engagement letter.");
+    }
+    if (targets.length || inp.licensed.length > 1) {
+      recs.push("Decide which jurisdiction's ethics rules govern the engagement and note your reasoning in the file or engagement letter, using the predominant-effect factors in ABA Op. 504. Rule 8.5(b) protects a reasonable belief about where the predominant effect falls.");
     }
     recs.push("Confirm the current text of each rule cited, since states amend these rules and issue new opinions. Most state bars run a free ethics hotline for questions like this.");
 
