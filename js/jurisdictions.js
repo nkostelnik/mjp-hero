@@ -18,13 +18,14 @@
   // Pseudo-jurisdictions used by some questions only.
   var FOREIGN = { code: "FOREIGN", name: "Outside the United States" };
   var FEDERAL = { code: "FED", name: "U.S. federal law" };
+  var MULTI = { code: "MULTI", name: "Many states (in-house contracts)" };
 
   var byCode = {};
-  JURISDICTIONS.concat([FOREIGN, FEDERAL]).forEach(function (j) { byCode[j.code] = j; });
+  JURISDICTIONS.concat([FOREIGN, FEDERAL, MULTI]).forEach(function (j) { byCode[j.code] = j; });
 
   function nameOf(code) { return byCode[code] ? byCode[code].name : code; }
 
-  var api = { JURISDICTIONS: JURISDICTIONS, FOREIGN: FOREIGN, FEDERAL: FEDERAL, nameOf: nameOf };
+  var api = { JURISDICTIONS: JURISDICTIONS, FOREIGN: FOREIGN, FEDERAL: FEDERAL, MULTI: MULTI, nameOf: nameOf };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else { root.MJP = root.MJP || {}; Object.assign(root.MJP, api); }
 })(this);

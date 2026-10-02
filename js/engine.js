@@ -11,10 +11,11 @@
  *   licensed: ["NY"],                // active U.S. licenses
  *   goodStanding: true,              // not disbarred or suspended anywhere
  *   clientLocations: ["NJ"],         // where the client is (code or "FOREIGN")
- *   practiceType: "private",         // "private" | "inhouse" | "federal" | "government"
- *   matterLaw: ["NY", "FED"],        // whose law the work mainly involves
+ *   practiceType: "private",         // "private" | "inhouse" | "fractional" | "federal" | "government"
+ *   matterLaw: ["NY", "FED"],        // whose law the work mainly involves ("MULTI" = many states, in-house contracts)
  *   duration: "ongoing",             // "temporary" | "ongoing"
  *   holdOutIn: [],                   // where there is an office, public address, or advertising
+ *   noPublicPresence: false,         // user confirmed there is none anywhere
  *   disclosesLimits: "yes",          // website/bio/letterhead say where admitted: "yes" | "no" | "na" (none exist)
  *   proceeding: "none",              // "none" | "court" | "adr"
  *   proceedingIn: "",                // code, or "FED" for a federal court
@@ -74,7 +75,9 @@
     var usPhys = phys.filter(function (c) { return c !== "FOREIGN"; });
     var clients = inp.clientLocations;
     var law = inp.matterLaw;
-    var lawStates = law.filter(function (c) { return c !== "FED"; });
+    var lawStates = law.filter(function (c) { return c !== "FED" && c !== "MULTI"; });
+    // "MULTI": in-house work under contracts governed by many different states' law.
+    var multiLaw = law.indexOf("MULTI") >= 0;
 
     // Proxy for 5.5(c)(3) and (c)(4): the work arises out of or reasonably relates to practice
     // in a licensed jurisdiction if it involves licensed-state or federal law or a client there.
@@ -108,6 +111,21 @@
     if (foreignLaw.length) {
       ov.push(f("caution", "The work involves the law of " + list(foreignLaw) + ", where you are not licensed. Separate from authorization to practice, you need the knowledge to handle it competently or should associate someone who has it.", cites(aba("1.1"))));
     }
+    if (inp.practiceType === "fractional") {
+      ov.push(f("caution", "The in-house exception covers lawyers employed by the organization they advise, and several states' in-house registration programs require exclusive employment by one company. A fractional general counsel serving several companies, or a lawyer employed by a staffing agency and placed with a client, usually should not rely on it. This analysis treats you as outside counsel. If one company employs you directly and exclusively, choose In-house instead.",
+        cites(aba("5.5(d)(1)"), aba("5.5 cmts"))));
+      ov.push(f("info", "Working through a staffing agency or for several companies also raises conflict, confidentiality, and fee-arrangement questions. Run conflicts across every company you serve.",
+        cites(aba("Op 88-356"))));
+    }
+    if (multiLaw) {
+      if (inp.practiceType === "inhouse") {
+        ov.push(f("ok", "As in-house counsel, advising your employer on contracts governed by many states' law is generally within the in-house exception. It is not limited to the law of the state where you are licensed. It covers only your employer and its affiliates, does not cover appearing in court or arbitration where pro hac vice is required, and you still need competence in each state's law that matters to a contract.",
+          cites(aba("5.5(d)(1)"), aba("1.1"))));
+      } else {
+        ov.push(f("caution", "You chose \"Many states (in-house contracts)\" but did not select in-house practice in question 6. For outside clients, including fractional or agency engagements, advising on many states' law from a jurisdiction where you are licensed is generally treated as practice where you are, but it is not covered by the in-house exception. Add any state whose law is central to the work in question 7 for a state-by-state check.",
+          cites(aba("5.5(c)(4)"), aba("8.5(b)(2)"), aba("1.1"))));
+      }
+    }
     sections.push({ jurisdiction: null, title: "Overview", findings: ov });
 
     // ---------- Licensed jurisdictions ----------
@@ -126,7 +144,7 @@
     // ---------- Unlicensed U.S. jurisdictions ----------
     var targets = uniq(usPhys
       .concat(clients, inp.holdOutIn, lawStates, inp.proceeding !== "none" ? [inp.proceedingIn] : [])
-    ).filter(function (c) { return c && c !== "FOREIGN" && c !== "FED" && !isLic(c); });
+    ).filter(function (c) { return c && c !== "FOREIGN" && c !== "FED" && c !== "MULTI" && !isLic(c); });
 
     targets.forEach(function (code) {
       sections.push(analyzeUnlicensed(code));
@@ -307,7 +325,7 @@
     if (inp.practiceType === "inhouse" && unlicPhys.length) {
       recs.push("Check in-house registration requirements and deadlines in " + list(unlicPhys) + "; some states impose deadlines measured from when you start working there.");
     }
-    if (unlicPhys.length && inp.practiceType === "private") {
+    if (unlicPhys.length && (inp.practiceType === "private" || inp.practiceType === "fractional")) {
       recs.push("Keep the work tied to your licensed jurisdiction's law or federal law, and decline or refer matters that are really about local law for local clients.");
     }
     recs.push("Confirm the current text of each rule cited, since states amend these rules and issue new opinions. Most state bars run a free ethics hotline for questions like this.");
@@ -340,7 +358,8 @@
       practiceType: raw.practiceType || "private",
       matterLaw: uniq(raw.matterLaw),
       duration: raw.duration === "temporary" ? "temporary" : "ongoing",
-      holdOutIn: uniq(raw.holdOutIn),
+      holdOutIn: raw.noPublicPresence ? [] : uniq(raw.holdOutIn),
+      noPublicPresence: !!raw.noPublicPresence,
       disclosesLimits: raw.disclosesLimits === false || raw.disclosesLimits === "no" ? "no"
         : raw.disclosesLimits === "na" ? "na" : "yes",
       proceeding: raw.proceeding || "none",

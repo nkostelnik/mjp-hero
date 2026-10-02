@@ -84,6 +84,10 @@
       cite: "ABA Formal Op. 498 (2021), Virtual Practice",
       text: "Virtual practice is permitted but carries duties of competence, confidentiality, and supervision, and does not relax the jurisdictional limits of Rule 5.5."
     },
+    "Op 88-356": {
+      cite: "ABA Formal Op. 88-356 (1988), Temporary Lawyers",
+      text: "Lawyers placed with firms or clients through a placement agency raise conflict-of-interest, confidentiality, and fee-arrangement questions. Whether the lawyer is associated with the firm or client depends on a functional analysis of the relationship."
+    },
     "Sperry": {
       cite: "Sperry v. Florida ex rel. Florida Bar, 373 U.S. 379 (1963)",
       text: "A state may not prohibit a practitioner authorized by federal law (there, patent practice before the USPTO) from performing that federally authorized practice within the state."

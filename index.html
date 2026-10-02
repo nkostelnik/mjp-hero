@@ -93,13 +93,15 @@
           <div class="radios stack" data-field="practiceType">
             <label><input type="radio" name="practiceType" value="private" checked> <b>Law firm or solo</b> <small>Representing outside clients</small></label>
             <label><input type="radio" name="practiceType" value="inhouse"> <b>In-house</b> <small>Advising only your employer or its affiliates</small></label>
+            <label><input type="radio" name="practiceType" value="fractional"> <b>Fractional, contract, or staffing-agency counsel</b> <small>Serving one or more companies part-time or by contract, directly or through a legal staffing agency</small></label>
             <label><input type="radio" name="practiceType" value="federal"> <b>Federal practice only</b> <small>For example, immigration, patent, or tax practice before a federal agency</small></label>
             <label><input type="radio" name="practiceType" value="government"> <b>Government</b> <small>Working for a federal, state, or local government</small></label>
           </div>
         </div>
         <div class="q">
           <span class="label" id="law-l"><span class="num">7.</span> Whose law does the work mainly involve?</span>
-          <div class="picker" data-field="matterLaw" data-federal="1" aria-labelledby="law-l"></div>
+          <p class="hint">In-house counsel whose contracts are governed by many different states' law can choose "Many states (in-house contracts)".</p>
+          <div class="picker" data-field="matterLaw" data-federal="1" data-multi="1" aria-labelledby="law-l"></div>
         </div>
         <div class="q">
           <span class="label"><span class="num">8.</span> Is this a one-time matter or ongoing work?</span>
@@ -114,8 +116,9 @@
         <legend>Public presence</legend>
         <div class="q">
           <span class="label" id="hold-l"><span class="num">9.</span> Where do you have an office, a public business address, or advertising?</span>
-          <p class="hint">Include a home address listed on a website, bio, card, or directory profile. Leave empty if none.</p>
+          <p class="hint">Include a home address listed on a website, bio, card, or directory profile.</p>
           <div class="picker" data-field="holdOutIn" aria-labelledby="hold-l"></div>
+          <label class="none-opt"><input type="checkbox" id="noPublicPresence"> I don&#39;t have an office, public business address, or advertising</label>
         </div>
         <div class="q">
           <span class="label"><span class="num">10.</span> Do your website, bio, letterhead, and signature state where you are admitted?</span>

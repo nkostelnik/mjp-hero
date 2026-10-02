@@ -20,6 +20,7 @@
     select.innerHTML = "";
     select.appendChild(el("option", { value: "", text: opts.placeholder || "Choose..." }));
     if (opts.federal) select.appendChild(el("option", { value: "FED", text: "U.S. federal law" }));
+    if (opts.multi) select.appendChild(el("option", { value: "MULTI", text: M.MULTI.name }));
     if (opts.federalCourt) select.appendChild(el("option", { value: "FED", text: "Federal court" }));
     M.JURISDICTIONS.forEach(function (j) { select.appendChild(el("option", { value: j.code, text: j.name })); });
     if (opts.foreign) select.appendChild(el("option", { value: "FOREIGN", text: "Outside the United States" }));
@@ -34,7 +35,7 @@
     var field = box.getAttribute("data-field");
     picks[field] = [];
     var sel = el("select", { "aria-label": "Add a jurisdiction" });
-    options(sel, { placeholder: "Add...", foreign: box.hasAttribute("data-foreign"), federal: box.hasAttribute("data-federal") });
+    options(sel, { placeholder: "Add...", foreign: box.hasAttribute("data-foreign"), federal: box.hasAttribute("data-federal"), multi: box.hasAttribute("data-multi") });
     var chips = el("div", { class: "chips" });
     box.appendChild(chips);
     box.appendChild(sel);
@@ -57,7 +58,17 @@
       });
     }
     box._draw = drawChips;
+    box._select = sel;
   });
+
+  // Question 9: "none" checkbox clears and disables the jurisdiction picker; adding a jurisdiction unchecks it.
+  var noneBox = document.getElementById("noPublicPresence");
+  var holdPicker = document.querySelector('.picker[data-field="holdOutIn"]');
+  function syncNone() {
+    if (noneBox.checked && picks.holdOutIn.length) { picks.holdOutIn = []; holdPicker._draw(); }
+    holdPicker._select.disabled = noneBox.checked;
+  }
+  noneBox.addEventListener("change", syncNone);
 
   function radio(name) {
     var r = form.querySelector('input[name="' + name + '"]:checked');
@@ -77,7 +88,8 @@
       practiceType: radio("practiceType"),
       matterLaw: picks.matterLaw,
       duration: radio("duration"),
-      holdOutIn: picks.holdOutIn,
+      holdOutIn: noneBox.checked ? [] : picks.holdOutIn,
+      noPublicPresence: noneBox.checked,
       disclosesLimits: radio("disclosesLimits") || "yes",
       proceeding: proceeding,
       proceedingIn: document.getElementById("proceedingIn").value,
@@ -210,12 +222,14 @@
     form.reset();
     Object.keys(picks).forEach(function (k) { picks[k] = []; });
     Array.prototype.forEach.call(document.querySelectorAll(".picker"), function (b) { b._draw(); });
+    syncNone();
   }
 
   // A New York lawyer living in Florida, with clients in New York and California.
   var EXAMPLE = {
     residence: "FL", licensed: ["NY"], clientLocations: ["NY", "CA"], matterLaw: ["NY", "FED"],
-    radios: { practiceType: "private", duration: "ongoing", disclosesLimits: "yes", proceeding: "none", localCounsel: "no" }
+    radios: { practiceType: "private", duration: "ongoing", disclosesLimits: "yes", proceeding: "none", localCounsel: "no" },
+    noPublicPresence: true
   };
 
   function loadExample() {
@@ -227,6 +241,8 @@
       var r = form.querySelector('input[name="' + name + '"][value="' + EXAMPLE.radios[name] + '"]');
       if (r) r.checked = true;
     });
+    noneBox.checked = EXAMPLE.noPublicPresence;
+    syncNone();
     update();
   }
 

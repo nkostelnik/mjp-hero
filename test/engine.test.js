@@ -147,6 +147,31 @@ test("verified state citations carry a source URL", function () {
   });
 });
 
+test("in-house with many states' law is ok under 5.5(d)(1) and adds no state sections", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", matterLaw: ["MULTI"] }));
+  assert.strictEqual(r.overall, "ok");
+  assert.ok(cited(r, "5.5(d)(1)"));
+  assert.ok(!section(r, "MULTI"));
+});
+
+test("many states' law without in-house practice is caution", function () {
+  var r = analyze(withBase({ practiceType: "private", matterLaw: ["MULTI"] }));
+  assert.strictEqual(section(r, null).level, "caution");
+});
+
+test("no public presence overrides any listed office", function () {
+  var r = analyze(withBase({ residence: "FL", workLocations: ["FL"], holdOutIn: ["FL"], noPublicPresence: true }));
+  assert.notStrictEqual(section(r, "FL").level, "risk");
+});
+
+test("fractional counsel is analyzed as outside counsel, not in-house", function () {
+  var r = analyze(withBase({ practiceType: "fractional", residence: "FL", workLocations: ["FL"], clientLocations: ["FL"], matterLaw: ["FL"] }));
+  assert.strictEqual(section(r, "FL").level, "risk");
+  assert.ok(cited(r, "88-356"));
+  var inhouse = analyze(withBase({ practiceType: "inhouse", residence: "FL", workLocations: ["FL"], clientLocations: ["FL"], matterLaw: ["FL"] }));
+  assert.strictEqual(section(inhouse, "FL").level, "caution");
+});
+
 var failed = 0;
 tests.forEach(function (t) {
   try { t[1](); console.log("ok   " + t[0]); }

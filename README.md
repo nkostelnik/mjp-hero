@@ -15,10 +15,10 @@
 3. Where are you licensed?
 4. Are you in good standing everywhere you are licensed?
 5. Where is the client located?
-6. What type of practice is this? (law firm, in-house, federal practice, government)
-7. Whose law does the work mainly involve?
+6. What type of practice is this? (law firm, in-house, fractional or staffing-agency counsel, federal practice, government)
+7. Whose law does the work mainly involve? (including "many states" for in-house contract work)
 8. Is it a one-time matter or ongoing work?
-9. Where do you have an office, public address, or advertising?
+9. Where do you have an office, public address, or advertising? (or none)
 10. Do your website, bio, letterhead, and signature state where you are admitted?
 11. Is there a pending or expected proceeding? (court, arbitration, or mediation)
 12. Where is it?
