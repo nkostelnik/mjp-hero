@@ -45,7 +45,7 @@
     var s = A.STATES[code];
     if (!s || !s[field]) return null;
     var c = s[field];
-    return { cite: c.cite, text: c.text, verified: c.verified, checked: c.checked, url: c.url, source: "state", noRegistration: c.noRegistration, level: c.level };
+    return { cite: c.cite, text: c.text, verified: c.verified, checked: c.checked, url: c.url, source: "state", noRegistration: c.noRegistration, noInHouseException: c.noInHouseException, level: c.level };
   }
   function cites() {
     return Array.prototype.slice.call(arguments).filter(Boolean);
@@ -188,7 +188,10 @@
 
       // Physically working here
       if (present) {
-        if (pt === "inhouse") {
+        if (pt === "inhouse" && st(code, "inHouse") && st(code, "inHouse").noInHouseException) {
+          var noEx = st(code, "inHouse");
+          fs.push(f(isClient ? "risk" : "caution", name + " has no in-house exception. " + noEx.text + (isClient ? "" : " If your employer is outside " + name + " and you only practice your licensing state's law, " + name + "'s remote-work guidance may still cover you."), cites(noEx, st(code, "remote"))));
+        } else if (pt === "inhouse") {
           var reg = st(code, "inHouse");
           fs.push(f("caution", "Working from " + name + " for your employer is generally permitted under the in-house exception, but " +
             (reg && reg.noRegistration ? name + " does not require in-house counsel to register." : reg ? name + " has an in-house registration or limited-license requirement you should satisfy." : "many states require in-house lawyers to register; check " + name + "'s rule.") +
@@ -213,7 +216,8 @@
             "Working remotely from " + name + " on matters for your licensed jurisdiction, with no local office, advertising, or holding out, is generally permitted under ABA Op. 495" +
             (remoteNarrow ? ", but " + name + "'s own guidance is narrower. Check its conditions before relying on it." :
               remote ? ", and " + name + " has issued consistent guidance." :
-              ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view."),
+              (A.STATES[code] && A.STATES[code].remoteNone ? ". As of " + A.STATES[code].remoteNone + " we found no " + name + " rule or opinion on remote work from " + name + ", so ABA Op. 495 is persuasive but not binding there." :
+              ". This tool has no " + name + "-specific remote-work authority, so confirm " + name + " has not taken a narrower view.")),
             cites(aba("Op 495"), aba("Op 498"), aba("5.5(b)(1)"), remote)));
           if (A.STATES[code] && A.STATES[code].clientNotice && !(remote && remote.level === "risk")) {
             fs.push(f("caution", name + " requires you to tell each client that you are not licensed in " + name + ".", cites(remote)));
@@ -232,6 +236,8 @@
         var vih = st(code, "virtualInHouse");
         if (pt === "inhouse" && vih && isClient) {
           fs.push(f("risk", name + " requires a license even for in-house lawyers who serve a " + name + " company remotely from another state. " + vih.text, cites(vih, st(code, "inHouse"), aba("5.5 cmt4"))));
+        } else if (pt === "inhouse" && st(code, "inHouse") && st(code, "inHouse").noInHouseException) {
+          fs.push(f("caution", name + " has no in-house exception, so advising a " + name + " employer can require " + name + " admission even from outside " + name + ".", cites(st(code, "inHouse"), aba("5.5 cmt4"))));
         } else if (pt === "inhouse") {
           fs.push(f("ok", "Advising your employer or its affiliates located in " + name + " is within the in-house exception.", cites(aba("5.5(d)(1)"))));
         } else if (pt === "federal" && !lawHere) {

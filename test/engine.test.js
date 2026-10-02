@@ -216,6 +216,40 @@ test("all-in-one-state practice gets no remote recommendations", function () {
   assert.ok(!recs(r, "ABA Op. 498") && !recs(r, "ABA Op. 504"));
 });
 
+test("states with no remote-work guidance say so with the search date", function () {
+  var r = analyze(withBase({ residence: "KY", workLocations: ["KY"] }));
+  var txt = section(r, "KY").findings.map(function (x) { return x.text; }).join(" ");
+  assert.ok(txt.indexOf("we found no Kentucky rule or opinion") >= 0);
+  assert.ok(cited(r, "Ky. SCR 3.130(5.5)"));
+});
+
+test("Oregon remote work is ok under Formal Op. 2022-200", function () {
+  var r = analyze(withBase({ residence: "OR", workLocations: ["OR"] }));
+  assert.strictEqual(section(r, "OR").level, "ok");
+});
+
+test("every state and D.C. has data, with rule and remote coverage", function () {
+  var A = require("../js/authorities.js");
+  var J = require("../js/jurisdictions.js");
+  J.JURISDICTIONS.filter(function (j) { return ["PR", "VI", "GU", "MP"].indexOf(j.code) < 0; }).forEach(function (j) {
+    var s = A.STATES[j.code];
+    assert.ok(s, j.code + " missing");
+    assert.ok(s.remote || s.remoteNone, j.code + " has no remote-work entry");
+  });
+});
+
+test("Hawaii has no in-house exception", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", residence: "HI", workLocations: ["HI"], clientLocations: ["HI"] }));
+  assert.strictEqual(section(r, "HI").level, "risk");
+  var remote = analyze(withBase({ practiceType: "inhouse", clientLocations: ["HI"] }));
+  assert.strictEqual(section(remote, "HI").level, "caution");
+});
+
+test("Georgia in-house needs no registration", function () {
+  var r = analyze(withBase({ practiceType: "inhouse", residence: "GA", workLocations: ["GA"], clientLocations: ["GA"] }));
+  assert.ok(section(r, "GA").findings.some(function (x) { return x.text.indexOf("does not require in-house counsel to register") >= 0; }));
+});
+
 var failed = 0;
 tests.forEach(function (t) {
   try { t[1](); console.log("ok   " + t[0]); }

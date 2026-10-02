@@ -8,7 +8,8 @@
     "test": "node test/engine.test.js",
     "start": "npx --yes serve -l 5195 .",
     "build": "node build.js",
-    "social": "node assets/social/render.js"
+    "social": "node assets/social/render.js",
+    "coverage": "node scripts/coverage.js"
   },
   "license": "MIT",
   "author": "Nate Kostelnik"

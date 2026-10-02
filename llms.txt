@@ -1,6 +1,6 @@
 # MJP Hero
 
-> A free, offline issue-spotting tool for lawyers practicing across state lines (multijurisdictional practice / MJP). Answer 14 questions and get a recommendation citing ABA Model Rule 5.5, ABA Model Rule 8.5, ABA Formal Opinions 495, 498, 504, and 88-356, and sourced state rules (full coverage for 10 jurisdictions, remote-work guidance for 27).
+> A free, offline issue-spotting tool for lawyers practicing across state lines (multijurisdictional practice / MJP). Answer 14 questions and get a recommendation citing ABA Model Rule 5.5, ABA Model Rule 8.5, ABA Formal Opinions 495, 498, 504, and 88-356, and sourced state rules for all 50 states and D.C..
 
 Not legal advice. Runs entirely in the browser with no network access (enforced by CSP) and no data storage; nothing a user enters ever leaves the tab.
 

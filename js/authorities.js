@@ -107,7 +107,8 @@
    *   rule      adopted version of Rule 5.5
    *   upl       statute or court rule defining unauthorized practice
    *   temp      temporary or registered practice by out-of-state lawyers
-   *   inHouse   in-house counsel registration (noRegistration: true if none is required)
+   *   inHouse   in-house counsel registration (noRegistration: true if none is required;
+   *             noInHouseException: true if the state has no in-house exception at all)
    *   phv       pro hac vice admission
    *   adr       out-of-state counsel in arbitration
    *   remote    guidance on remote work from within the state for out-of-state matters
@@ -117,6 +118,7 @@
    *   virtualInHouse  authority requiring a local license for in-house lawyers who serve a company
    *            in this state remotely from another state
    *   clientNotice    true if the state requires telling clients the lawyer is not licensed there
+   *   remoteNone      date of a search that found no remote-work rule or opinion for the state
    *
    * remote.level: "ok" (default), "caution" (narrower than Op. 495), or "risk" (state says remote
    * practice from the state is unauthorized).
@@ -131,19 +133,23 @@
   function v(cite, text, source, extra) {
     return Object.assign({ cite: cite, text: text || "", verified: true, checked: CHECKED, url: source || "" }, extra || {});
   }
+  function w(cite, text, source, extra) { return v(cite, text, source, Object.assign({ checked: "2026-10-01" }, extra || {})); }
+  var NONE_FOUND = "2026-10-01"; // date of the search that found no remote-work rule or opinion
+  function br(slug, page) { return "https://barreciprocity.com/" + slug + "-" + page + "/"; }
   function u(cite, text, extra) { return Object.assign({ cite: cite, text: text || "", verified: false }, extra || {}); }
 
   var STATES = {
     CA: {
       rule: u("Cal. R. Prof. Conduct 5.5", "California's version differs from the Model Rule; its exceptions for out-of-state lawyers are in the California Rules of Court."),
-      upl: u("Cal. Bus. & Prof. Code §§ 6125, 6126", "Practicing law in California without active State Bar membership is prohibited and can be a crime."),
-      temp: v("Cal. Rules of Court 9.47, 9.48", "Out-of-state lawyers may provide temporary litigation-related (9.47) or non-litigation (9.48) services only under the conditions those rules set.", "https://courts.ca.gov/cms/rules/index/nine"),
+      upl: w("Cal. Bus. & Prof. Code §§ 6125, 6126", "Practicing law in California without active State Bar membership, or holding out as entitled to, is a misdemeanor and can bar recovery of fees.", "https://www.sfbar.org/wp-content/uploads/2021/08/BASF-Ethics-Opinion-re-UPLMJP-8.2.21-Final-002.pdf"),
+      temp: v("Cal. Rules of Court 9.47, 9.48", "Out-of-state lawyers may provide temporary litigation-related (9.47) or non-litigation (9.48) services only under the conditions those rules set. These rules are not available to lawyers who live in California.", "https://courts.ca.gov/cms/rules/index/nine"),
       inHouse: v("Cal. Rules of Court 9.46", "Registered in-house counsel. The employer must have a California office and meet other qualifying-institution requirements.", "https://www.courts.ca.gov/cms/rules/index/nine/rule9_46"),
-      phv: u("Cal. Rules of Court 9.40", "Pro hac vice admission in California state courts."),
+      phv: w("Cal. Rules of Court 9.40", "Pro hac vice admission in California state courts. Lawyers who live in California are not eligible.", "https://www.sfbar.org/wp-content/uploads/2021/08/BASF-Ethics-Opinion-re-UPLMJP-8.2.21-Final-002.pdf"),
+      remote: w("Bar Ass'n of S.F. Ethics Op. 2021-1", "A San Francisco bar opinion concludes that a lawyer licensed elsewhere does not violate California law by working remotely from California, if the lawyer does not hold out as a California lawyer, establish a California office, or represent California persons or entities. It is a local bar opinion, not binding on the State Bar or courts.", "https://www.sfbar.org/wp-content/uploads/2021/08/BASF-Ethics-Opinion-re-UPLMJP-8.2.21-Final-002.pdf", { level: "caution" }),
       adr: v("Cal. Rules of Court 9.43", "Out-of-state attorney arbitration counsel must meet the rule's conditions to appear in a California arbitration.", "https://courts.ca.gov/cms/rules/index/nine/rule9_43"),
       notes: [
         "Birbrower, Montalbano, Condon & Frank v. Superior Court, 17 Cal. 4th 119 (1998): advising a California client on California matters can be practice \"in California\" even without being physically present.",
-        "Cal. State Bar Formal Op. 2023-208: this remote-work opinion addresses California lawyers' duties and does not approve remote practice from California by lawyers licensed only elsewhere. California has no rule or opinion equivalent to ABA Op. 495."
+        "Cal. State Bar Formal Op. 2023-208: this remote-work opinion addresses California lawyers' duties and does not approve remote practice from California by lawyers licensed only elsewhere. California has no statewide rule or State Bar opinion equivalent to ABA Op. 495."
       ]
     },
     NY: {
@@ -170,11 +176,14 @@
     },
     IL: {
       rule: v("Ill. R. Prof'l Conduct 5.5", "", "https://www.isba.org/ethics/irpc/rule55"),
+      remoteNone: NONE_FOUND,
       away: v("ISBA Advisory Op. 22-03 (2022)", "Illinois-licensed lawyers may practice Illinois law remotely from a jurisdiction where they are not licensed, if that jurisdiction does not prohibit it.", "https://www.isba.org/sites/default/files/ethicsopinions/Advisory%20Opinion%2022-03.pdf"),
       inHouse: v("Ill. S. Ct. R. 716 (amended eff. Jan. 1, 2026)", "Limited license for house counsel employed exclusively by a single entity and its affiliates.", "https://www.ilbaradmissions.org/appinfo.action?id=4"),
       phv: v("Ill. S. Ct. R. 707", "An out-of-state attorney may appear in a particular Illinois proceeding after an Illinois attorney files an appearance and a verified statement is filed with the ARDC.", "https://registration.iardc.org/attyreg/Registration/regdept/popup_rule707overview.aspx")
     },
     DC: {
+      inHouse: w("D.C. Ct. App. R. 49(c)(6)", "Lawyers not admitted in D.C. may serve their employer and its affiliates if the employer understands they are not D.C. Bar members. This does not cover appearing in any court or federal or D.C. agency.", "https://admissions.dcappeals.gov/getpdfform.action?id=900", { noRegistration: true }),
+      phv: w("D.C. Ct. App. R. 49(c)(7)", "No more than five pro hac vice applications per calendar year, except for exceptional cause.", "https://admissions.dcappeals.gov/getpdfform.action?id=900"),
       rule: u("D.C. R. Prof'l Conduct 5.5"),
       upl: v("D.C. Ct. App. R. 49", "D.C.'s unauthorized-practice rule, with its own list of exceptions in Rule 49(c).", "https://www.dccourts.gov/sites/default/files/matters-docs/rule49.pdf"),
       remote: v("D.C. Ct. App. R. 49(c)(13); D.C. Comm. on Unauthorized Practice of Law Op. 24-20 (2020)", "Rule 49(c)(13) covers a lawyer who occasionally practices from a D.C. residence, but only if the lawyer maintains a law office in a jurisdiction where admitted, does not use a D.C. address or hold out as authorized in D.C., and does not regularly meet clients in D.C. Op. 24-20 applied this during the COVID-19 pandemic. Full-time remote work from D.C. is not clearly covered.", "https://www.dccourts.gov/sites/default/files/2020-03/CUPL-Opinion-24-20.pdf", { level: "caution" })
@@ -187,11 +196,13 @@
     },
     PA: {
       rule: u("Pa. R. Prof'l Conduct 5.5"),
+      remoteNone: NONE_FOUND,
       away: v("Pa. Bar Ass'n & Phila. Bar Ass'n Joint Formal Op. 2021-100", "Pennsylvania-licensed lawyers may practice Pennsylvania law remotely from another jurisdiction if they take appropriate steps, including not holding out a local office, and the other jurisdiction does not prohibit it.", "https://www.lawnext.com/2021/03/the-ethics-of-working-from-outside-your-state-pa-bars-adopt-aba-rule.html"),
       phv: v("Pa. Bar Admission R. 301", "Pro hac vice requires a Pennsylvania attorney who agrees to act as attorney of record.", "https://www.pabarexam.org/bar_admission_rules/301.htm"),
       inHouse: v("Pa. Bar Admission R. 302", "Limited In-House Corporate Counsel License required for in-house lawyers working in Pennsylvania on more than a temporary basis or with an office or systematic presence there.", "https://www.pabarexam.org/bar_admission_rules/302.htm")
     },
     MA: {
+      phv: w("Mass. Gen. Laws ch. 221, § 46A", "A Massachusetts lawyer must file the motion; the home state must grant reciprocal privileges. Trial-court admission does not extend to appellate courts.", br("massachusetts", "pro-hac-vice")),
       rule: v("Mass. R. Prof. C. 5.5 (S.J.C. Rule 3:07)", "", "https://bbopublic.massbbo.org/web/f/(UpdatedMarch%202024)%20What%20you%20should%20know%20about%20Cross%20Border%20Remote%20Practice.pdf"),
       inHouse: v("S.J.C. Rule 4:02(9)", "In-house lawyers not admitted in Massachusetts must register with the Board of Bar Overseers if their principal office is in Massachusetts or they otherwise have a systematic and continuous presence there.", "https://www.massbbo.org/s/attorney-registration"),
       remote: v("Mass. R. Prof. C. 5.5, cmt. [4A] (eff. Apr. 1, 2024)", "Lawyers not admitted in Massachusetts may remotely practice the law of their licensing jurisdictions while physically in Massachusetts if they do not hold out as admitted there, do not advertise a Massachusetts office, and do not provide or offer legal services in Massachusetts.", "https://bbopublic.massbbo.org/web/f/(UpdatedMarch%202024)%20What%20you%20should%20know%20about%20Cross%20Border%20Remote%20Practice.pdf")
@@ -204,62 +215,256 @@
     },
     // Jurisdictions below have remote-work guidance only; the rest of their rules fall back to the ABA baseline.
     MO: {
-      inHouse: v("Mo. S. Ct. R. 8.105", "Limited license for lawyers not admitted in Missouri who serve their employer or its affiliates.", "https://mo-legal-ethics.org/informal-opinion/2024-02/"),
-      remote: v("Mo. Informal Advisory Op. 2024-03 (2024)", "A lawyer licensed elsewhere who lives in Missouri and works from a Missouri home office for an out-of-state firm is establishing a systematic and continuous presence and must seek Missouri admission.", "https://mo-legal-ethics.org/informal-opinion/2024-03/", { level: "risk" }),
-      virtualInHouse: v("Mo. Informal Advisory Op. 2024-02 (2024)", "A lawyer licensed elsewhere who works virtually from another state for a corporation located in Missouri must seek Missouri admission (for example, a Rule 8.105 limited license), because presence can be systematic and continuous without being physically in Missouri.", "https://mo-legal-ethics.org/informal-opinion/2024-02/")
+      rule: w("Mo. Sup. Ct. R. 4-5.5", "Missouri's rule generally tracks the Model Rule, but Missouri reads \"systematic and continuous presence\" broadly (see its remote-work opinions).", br("missouri", "mjp")),
+      phv: w("Mo. Sup. Ct. R. 9.03", "Out-of-state lawyers must associate with Missouri counsel who enters an appearance; a fee applies for each case and tribunal.", br("missouri", "pro-hac-vice")),
+      inHouse: w("Mo. S. Ct. R. 8.105", "Limited license for lawyers not admitted in Missouri who serve their employer or its affiliates.", "https://mo-legal-ethics.org/informal-opinion/2024-02/"),
+      remote: w("Mo. Informal Advisory Op. 2024-03 (2024)", "A lawyer licensed elsewhere who lives in Missouri and works from a Missouri home office for an out-of-state firm is establishing a systematic and continuous presence and must seek Missouri admission.", "https://mo-legal-ethics.org/informal-opinion/2024-03/", { level: "risk" }),
+      virtualInHouse: w("Mo. Informal Advisory Op. 2024-02 (2024)", "A lawyer licensed elsewhere who works virtually from another state for a corporation located in Missouri must seek Missouri admission (for example, a Rule 8.105 limited license), because presence can be systematic and continuous without being physically in Missouri.", "https://mo-legal-ethics.org/informal-opinion/2024-02/")
     },
     CO: {
-      remote: v("Colo. RPC 5.5, cmt. [1] (amended Feb. 2024); C.R.C.P. 205.1", "Lawyers physically in Colorado who provide services under another jurisdiction's authority do not violate Rule 5.5 if they do not solicit or accept clients in Colorado for services performed in Colorado and do not hold out as authorized in Colorado. Colorado regulators caution that working for a Colorado law firm with a Colorado office likely requires a Colorado license unless the practice is exclusively federal or tribal law.", "https://cl.cobar.org/departments/practicing-from-a-remote-jurisdiction/")
+      rule: w("Colo. RPC 5.5", "Colorado handles out-of-state lawyers through Rule 5.5 and C.R.C.P. 204 to 205.6.", br("colorado", "mjp")),
+      inHouse: w("C.R.C.P. 204.1 (single-client counsel)", "Single-client certification is required before practice begins, limited to one named employer, with annual fees and CLE.", br("colorado", "house-counsel")),
+      phv: w("C.R.C.P. 205", "Pro hac vice requires association with Colorado counsel.", br("colorado", "pro-hac-vice")),
+      remote: w("Colo. RPC 5.5, cmt. [1] (amended Feb. 2024); C.R.C.P. 205.1", "Lawyers physically in Colorado who provide services under another jurisdiction's authority do not violate Rule 5.5 if they do not solicit or accept clients in Colorado for services performed in Colorado and do not hold out as authorized in Colorado. Colorado regulators caution that working for a Colorado law firm with a Colorado office likely requires a Colorado license unless the practice is exclusively federal or tribal law.", "https://cl.cobar.org/departments/practicing-from-a-remote-jurisdiction/")
     },
     OH: {
-      remote: v("Ohio Prof. Cond. R. 5.5(d)(4) (eff. Sept. 1, 2021)", "Lawyers admitted elsewhere may practice their licensing jurisdiction's law remotely from Ohio if they do not solicit Ohio clients, appear in Ohio courts, or hold out as Ohio-admitted. If any Ohio location appears on letterhead, cards, websites, advertising, fee agreements, or signage, they must affirmatively state they are not admitted in Ohio.", "https://www.oblic.com/resources/oblic-news/09/07/2021/rule-5-5-amendments-allow-remote-practice/")
+      rule: w("Ohio Prof. Cond. R. 5.5", "Ohio's rule generally tracks the Model Rule, plus its 2021 remote-practice provision in 5.5(d)(4).", br("ohio", "mjp")),
+      inHouse: w("Ohio Gov. Bar R. VI, § 3", "Out-of-state in-house lawyers employed in Ohio must register with the Supreme Court and renew every two years.", br("ohio", "house-counsel")),
+      phv: w("Ohio Gov. Bar R. XII", "Ohio counsel must associate. No more than three proceedings a year, and lawyers who live or keep an office in Ohio generally are ineligible.", br("ohio", "pro-hac-vice")),
+      remote: w("Ohio Prof. Cond. R. 5.5(d)(4) (eff. Sept. 1, 2021)", "Lawyers admitted elsewhere may practice their licensing jurisdiction's law remotely from Ohio if they do not solicit Ohio clients, appear in Ohio courts, or hold out as Ohio-admitted. If any Ohio location appears on letterhead, cards, websites, advertising, fee agreements, or signage, they must affirmatively state they are not admitted in Ohio.", "https://www.oblic.com/resources/oblic-news/09/07/2021/rule-5-5-amendments-allow-remote-practice/")
     },
     NC: {
-      remote: v("N.C. RPC 5.5; N.C. State Bar, \"Home is Where the Heart Is\" (2021)", "Lawyers licensed elsewhere may work remotely from North Carolina for their own jurisdiction's clients if they do not suggest they are licensed in North Carolina and protect client confidentiality.", "https://www.ncbar.gov/for-lawyers/ethics/ethics-articles/home-is-where-the-heart-is/")
+      rule: w("N.C. RPC 5.5", "North Carolina's rule generally tracks the Model Rule.", br("north-carolina", "mjp")),
+      inHouse: w("N.C. RPC 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice. Public communications must disclose where the lawyer is licensed.", br("north-carolina", "house-counsel"), { noRegistration: true }),
+      phv: w("N.C. Gen. Stat. § 84-4.1", "The out-of-state lawyer must associate with a North Carolina-resident lawyer who appears. The home state must grant reciprocal privileges, and full disciplinary history must be disclosed.", br("north-carolina", "pro-hac-vice")),
+      remote: w("N.C. RPC 5.5; N.C. State Bar, \"Home is Where the Heart Is\" (2021)", "Lawyers licensed elsewhere may work remotely from North Carolina for their own jurisdiction's clients if they do not suggest they are licensed in North Carolina and protect client confidentiality.", "https://www.ncbar.gov/for-lawyers/ethics/ethics-articles/home-is-where-the-heart-is/")
     },
     MN: {
-      remote: v("Minn. RPC 5.5(d)", "Lawyers admitted elsewhere may provide services in Minnesota that exclusively involve federal law, tribal law, or the law of a jurisdiction where they are licensed, but must advise each client that they are not licensed in Minnesota.", "https://www.revisor.mn.gov/court_rules/pr/subtype/cond/id/5.5/"),
+      rule: w("Minn. RPC 5.5", "Minnesota's rule includes a 5.5(d) provision for federal, tribal, and licensed-state law practice from Minnesota.", "https://www.revisor.mn.gov/court_rules/pr/subtype/cond/id/5.5/"),
+      inHouse: w("Minn. R. Admission to the Bar 9 (temporary), 10 (permanent)", "A limited in-house license is required, generally with 36 months of practice in the last 60. It ends when the employment ends.", br("minnesota", "house-counsel")),
+      phv: w("Minn. Gen. R. Prac. 5; Minn. R. Civ. App. P. 143.05", "Minnesota counsel must associate, sign pleadings, and attend hearings unless the court excuses it.", br("minnesota", "pro-hac-vice")),
+      remote: w("Minn. RPC 5.5(d)", "Lawyers admitted elsewhere may provide services in Minnesota that exclusively involve federal law, tribal law, or the law of a jurisdiction where they are licensed, but must advise each client that they are not licensed in Minnesota.", "https://www.revisor.mn.gov/court_rules/pr/subtype/cond/id/5.5/"),
       clientNotice: true
     },
     AZ: {
+      rule: u("Ariz. R. Sup. Ct. 42, ER 5.5", ""),
+      inHouse: w("Ariz. R. Sup. Ct. 38(a)", "In-house lawyers must obtain a Certificate of Registration of In-House Counsel within 90 days of starting work for an Arizona employer.", br("arizona", "house-counsel")),
+      phv: u("Ariz. R. Sup. Ct. 39 (pro hac vice)", "Arizona counsel must associate. Lawyers who live, are regularly employed, or regularly do substantial business in Arizona are ineligible, and repeated appearances may be denied. Admission lasts one year."),
       remote: u("Ariz. ER 5.5(d)", "Lawyers admitted elsewhere may provide services in Arizona that exclusively involve federal law, another jurisdiction's law, or tribal law, but must advise clients they are not admitted in Arizona and obtain informed consent."),
       clientNotice: true
     },
     CT: {
-      remote: v("Conn. RPC 5.5(f); Conn. Practice Book § 2-44A(c) (eff. Jan. 1, 2023)", "Remote practice from Connecticut that is authorized by a jurisdiction where the lawyer is admitted is not the practice of law in Connecticut. It does not allow holding out as authorized in Connecticut or serving Connecticut clients.", "https://www.jud.ct.gov/lawjournal/Docs/Misc/2022/29/pblj_8402.pdf")
+      rule: w("Conn. RPC 5.5", "Connecticut's rule includes a 2023 remote-practice provision in 5.5(f).", "https://www.jud.ct.gov/lawjournal/Docs/Misc/2022/29/pblj_8402.pdf"),
+      inHouse: w("Conn. Practice Book § 2-15A", "Authorized house counsel must register annually with the Statewide Grievance Committee and work only for an employer that does not practice law for others.", br("connecticut", "house-counsel")),
+      phv: w("Conn. Practice Book § 2-16", "Pro hac vice requires association with Connecticut counsel.", br("connecticut", "pro-hac-vice")),
+      remote: w("Conn. RPC 5.5(f); Conn. Practice Book § 2-44A(c) (eff. Jan. 1, 2023)", "Remote practice from Connecticut that is authorized by a jurisdiction where the lawyer is admitted is not the practice of law in Connecticut. It does not allow holding out as authorized in Connecticut or serving Connecticut clients.", "https://www.jud.ct.gov/lawjournal/Docs/Misc/2022/29/pblj_8402.pdf")
     },
     NH: {
-      remote: v("N.H. RPC 5.5(d) & Ethics Committee cmt. 3", "Lawyers licensed elsewhere who do not practice New Hampshire law need not obtain a New Hampshire license merely because they are physically in New Hampshire, if they do not hold out as admitted there.", "https://www.nhbar.org/working-remotely-under-nh-rule-5-5/")
+      rule: w("N.H. RPC 5.5", "New Hampshire's rule is more permissive than the Model Rule for lawyers who practice only the law of their licensing state.", "https://www.nhbar.org/working-remotely-under-nh-rule-5-5/"),
+      inHouse: w("N.H. RPC 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("new-hampshire", "house-counsel"), { noRegistration: true }),
+      phv: w("N.H. Sup. Ct. R. 33", "New Hampshire counsel must associate, remain lawyer of record, and attend oral argument.", br("new-hampshire", "pro-hac-vice")),
+      remote: w("N.H. RPC 5.5(d) & Ethics Committee cmt. 3", "Lawyers licensed elsewhere who do not practice New Hampshire law need not obtain a New Hampshire license merely because they are physically in New Hampshire, if they do not hold out as admitted there.", "https://www.nhbar.org/working-remotely-under-nh-rule-5-5/")
     },
     VT: {
-      remote: v("Vt. RPC 5.5, cmt. [22]", "Vermont added a comment expressly adopting ABA Op. 495 for remote practice from Vermont.", MASS_BBO)
+      rule: w("Vt. RPC 5.5", "", br("vermont", "house-counsel")),
+      inHouse: w("Vt. RPC 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("vermont", "house-counsel"), { noRegistration: true }),
+      phv: u("Vermont pro hac vice rules (Vermont Judiciary)", "Pro hac vice requires association with Vermont counsel."),
+      remote: w("Vt. RPC 5.5, cmt. [22]", "Vermont added a comment expressly adopting ABA Op. 495 for remote practice from Vermont.", MASS_BBO)
     },
     RI: {
-      remote: v("R.I. RPC 5.5, cmt. [4]", "Lawyers not licensed in Rhode Island may work from a Rhode Island home under conditions, but may not hold in-person meetings in Rhode Island with clients or third parties unless another exception applies.", MASS_BBO)
+      rule: w("R.I. Sup. Ct. R. Art. V, RPC 5.5", "", br("rhode-island", "house-counsel")),
+      inHouse: w("R.I. Sup. Ct. R. Art. II, R. 9(b)", "In-house counsel employed at a Rhode Island office must register with the Supreme Court and comply with Rhode Island CLE.", br("rhode-island", "house-counsel")),
+      phv: w("R.I. Sup. Ct. R. Art. II (pro hac vice)", "Pro hac vice requires association with Rhode Island counsel.", br("rhode-island", "pro-hac-vice")),
+      remote: w("R.I. RPC 5.5, cmt. [4]", "Lawyers not licensed in Rhode Island may work from a Rhode Island home under conditions, but may not hold in-person meetings in Rhode Island with clients or third parties unless another exception applies.", MASS_BBO)
     },
     ME: {
-      remote: v("Me. Prof. Ethics Comm'n Op. 189 (2005)", "A lawyer who lives in Maine and works from home for an out-of-state firm and out-of-state clients, without a Maine office or holding out, is not engaged in unauthorized practice.", MASS_BBO)
+      rule: w("Me. RPC 5.5", "", br("maine", "house-counsel")),
+      inHouse: w("Me. RPC 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("maine", "house-counsel"), { noRegistration: true }),
+      phv: w("Me. Rev. Stat. tit. 4, § 802; Me. R. Civ. P. 89(b)", "A Maine Bar member must move the admission and stay actively associated throughout.", br("maine", "pro-hac-vice")),
+      remote: w("Me. Prof. Ethics Comm'n Op. 189 (2005)", "A lawyer who lives in Maine and works from home for an out-of-state firm and out-of-state clients, without a Maine office or holding out, is not engaged in unauthorized practice.", MASS_BBO)
     },
     UT: {
-      remote: v("Utah Ethics Advisory Op. 19-03 (2019)", "An out-of-state lawyer may represent clients from the licensing state from a private home in Utah, but must not establish a public office in Utah or solicit Utah business.", "https://www.utahbar.org/ethics-opinions/19-03/")
+      rule: w("Utah RPC 5.5", "", br("utah", "house-counsel")),
+      inHouse: w("Utah State Bar R. 14-719", "An in-house counsel license is required once the lawyer has a systematic and continuous Utah presence, such as Utah residence or a qualifying Utah employer.", br("utah", "house-counsel")),
+      phv: w("Utah Sup. Ct. R. 14-806", "Lawyers who live in Utah are ineligible. A Utah-resident Utah lawyer must associate, sign the first pleading, and stay counsel of record.", br("utah", "pro-hac-vice")),
+      remote: w("Utah Ethics Advisory Op. 19-03 (2019)", "An out-of-state lawyer may represent clients from the licensing state from a private home in Utah, but must not establish a public office in Utah or solicit Utah business.", "https://www.utahbar.org/ethics-opinions/19-03/")
     },
     SC: {
-      remote: v("S.C. RPC 5.5, cmt. [4] (amended Mar. 15, 2023)", "Remote work in South Carolina does not establish an office or systematic presence if the lawyer's services are limited to those authorized by a jurisdiction where the lawyer is admitted and the lawyer does not state, imply, or hold out that the lawyer is a South Carolina lawyer.", "https://www.sccourts.org/opinions-orders/court-orders/order-detail/?order=2023-03-15-02")
+      rule: w("S.C. App. Ct. R. 407, RPC 5.5", "", "https://www.sccourts.org/opinions-orders/court-orders/order-detail/?order=2023-03-15-02"),
+      inHouse: w("S.C. App. Ct. R. 405", "In-house lawyers need a limited certificate of admission, work only for the South Carolina employer, and are subject to South Carolina CLE.", br("south-carolina", "house-counsel")),
+      phv: w("S.C. App. Ct. R. 404", "More than six pro hac vice applications in a calendar year is treated as regularly practicing in South Carolina.", br("south-carolina", "pro-hac-vice")),
+      remote: w("S.C. RPC 5.5, cmt. [4] (amended Mar. 15, 2023)", "Remote work in South Carolina does not establish an office or systematic presence if the lawyer's services are limited to those authorized by a jurisdiction where the lawyer is admitted and the lawyer does not state, imply, or hold out that the lawyer is a South Carolina lawyer.", "https://www.sccourts.org/opinions-orders/court-orders/order-detail/?order=2023-03-15-02")
     },
     HI: {
-      remote: v("Haw. RPC 5.5, cmt. [3] (eff. July 1, 2022)", "Lawyers licensed elsewhere may remotely practice that jurisdiction's law while in Hawaii if they do not hold out as licensed in Hawaii, advertise a Hawaii office, provide or offer Hawaii legal services, or do anything connected to practice in Hawaii beyond being physically present.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf"),
-      away: v("Haw. RPC 5.5, cmt. [3]", "Hawaii-licensed lawyers may practice remotely from outside Hawaii if the jurisdiction where they are physically present does not prohibit it.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf")
+      rule: w("Haw. RPC 5.5", "Hawaii has not adopted the Model Rule's 5.5(d) in-house safe harbor.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf"),
+      inHouse: w("Haw. RPC 5.5 (no in-house exception)", "Hawaii has no house-counsel registration and no Model Rule 5.5(d) safe harbor. A lawyer serving a Hawaii employer needs Hawaii admission or other authorization.", br("hawaii", "house-counsel"), { noInHouseException: true }),
+      phv: w("Haw. Sup. Ct. R. 1.9", "Lawyers who live in Hawaii are ineligible. A Hawaii Bar member must associate, and the Disciplinary Board fee must be paid within 10 days and yearly.", br("hawaii", "pro-hac-vice")),
+      remote: w("Haw. RPC 5.5, cmt. [3] (eff. July 1, 2022)", "Lawyers licensed elsewhere may remotely practice that jurisdiction's law while in Hawaii if they do not hold out as licensed in Hawaii, advertise a Hawaii office, provide or offer Hawaii legal services, or do anything connected to practice in Hawaii beyond being physically present.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf"),
+      away: w("Haw. RPC 5.5, cmt. [3]", "Hawaii-licensed lawyers may practice remotely from outside Hawaii if the jurisdiction where they are physically present does not prohibit it.", "https://www.courts.state.hi.us/wp-content/uploads/2022/03/2022_hrpc5.5am_ada.pdf")
     },
     MI: {
-      remote: v("Mich. Ethics Op. RI-382 (2021)", "An out-of-state lawyer physically located in Michigan but practicing exclusively the law of a jurisdiction where the lawyer is licensed does not violate Michigan Rule 5.5.", "https://www.michbar.org/opinions/ethics/numbered_opinions/RI-382")
+      rule: w("Mich. RPC 5.5", "", br("michigan", "house-counsel")),
+      inHouse: w("Mich. Bd. of Law Examiners R. 5(D)", "A special certificate is required to practice solely for the employer from a Michigan office; it ends with the employment.", br("michigan", "house-counsel")),
+      phv: w("MCR 8.126", "Michigan counsel must appear of record. No more than five pro hac vice cases in a 365-day period.", br("michigan", "pro-hac-vice")),
+      remote: w("Mich. Ethics Op. RI-382 (2021)", "An out-of-state lawyer physically located in Michigan but practicing exclusively the law of a jurisdiction where the lawyer is licensed does not violate Michigan Rule 5.5.", "https://www.michbar.org/opinions/ethics/numbered_opinions/RI-382")
     },
     WI: {
-      remote: v("Wis. Formal Ethics Op. EF-21-02 (2021)", "Wisconsin's rule does not prohibit an out-of-state lawyer from representing clients of the licensing state from a private location in Wisconsin.", "https://www.wisbar.org/NewsPublications/WisconsinLawyer/Pages/Article.aspx?ArticleID=28330")
+      rule: w("Wis. SCR 20:5.5", "", br("wisconsin", "house-counsel")),
+      inHouse: w("Wis. SCR 10.03(4)(f)", "In-house lawyers employed exclusively by a qualifying employer must register with the Board of Bar Examiners within 60 days of starting.", br("wisconsin", "house-counsel")),
+      phv: w("Wis. SCR 10.03(4)(b), (d)", "The nonresident lawyer must appear with an active Wisconsin lawyer who participates in the matter.", br("wisconsin", "pro-hac-vice")),
+      remote: w("Wis. Formal Ethics Op. EF-21-02 (2021)", "Wisconsin's rule does not prohibit an out-of-state lawyer from representing clients of the licensing state from a private location in Wisconsin.", "https://www.wisbar.org/NewsPublications/WisconsinLawyer/Pages/Article.aspx?ArticleID=28330")
     },
     WA: {
-      remote: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Out-of-state lawyers may generally practice remotely from Washington if they limit their work to their licensing jurisdictions and do not hold out as available to practice in Washington.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
-      residency: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington does not require a physical office, but an active Washington lawyer who lives outside Washington must file the name and street address of a resident agent in Washington with the WSBA.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
-      away: v("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington-licensed lawyers may practice from a home office in another state, but should confirm their presence there is not unauthorized practice under that state's rules.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4")
+      rule: w("Wash. RPC 5.5", "", br("washington", "house-counsel")),
+      inHouse: w("Wash. APR 8(f)", "House counsel need limited admission to practice exclusively for a qualifying Washington employer; temporary practice is allowed while the application is pending.", br("washington", "house-counsel")),
+      phv: w("Wash. APR 8(b)", "Pro hac vice requires association with Washington counsel.", br("washington", "pro-hac-vice")),
+      remote: w("WSBA Advisory Op. 201601 (2016, amended 2022)", "Out-of-state lawyers may generally practice remotely from Washington if they limit their work to their licensing jurisdictions and do not hold out as available to practice in Washington.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
+      residency: w("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington does not require a physical office, but an active Washington lawyer who lives outside Washington must file the name and street address of a resident agent in Washington with the WSBA.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4"),
+      away: w("WSBA Advisory Op. 201601 (2016, amended 2022)", "Washington-licensed lawyers may practice from a home office in another state, but should confirm their presence there is not unauthorized practice under that state's rules.", "https://wsba.org/docs/default-source/legal-community/committees/committee-on-professional-ethics/201601-regarding-updated-opinion-on-remote-and-virtual-law-practice-.pdf?sfvrsn=180113f1_4")
+    },
+    // Remaining states (2026-10-01). remoteNone = searched, no remote-work rule or opinion found.
+    AL: {
+      rule: w("Ala. R. Prof. Conduct 5.5", "Alabama's rule is not identical to the Model Rule.", br("alabama", "mjp")),
+      inHouse: w("Rules Governing Admission to the Ala. State Bar, Rule VIII", "Authorized house counsel must register annually, work exclusively for a qualifying employer, and notify the Bar within 30 days if employment ends.", br("alabama", "house-counsel")),
+      phv: w("Rules Governing Admission to the Ala. State Bar, Rule VII", "Pro hac vice requires association with Alabama counsel and is limited to the proceeding.", br("alabama", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    AK: {
+      rule: w("Alaska R. Prof. Conduct 5.5", "Alaska's rule generally tracks the Model Rule.", br("alaska", "mjp")),
+      inHouse: w("Alaska R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("alaska", "house-counsel"), { noRegistration: true }),
+      phv: w("Alaska R. Civ. P. 81", "Pro hac vice requires association with Alaska counsel.", br("alaska", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    AR: {
+      rule: w("Ark. R. Prof. Conduct 5.5", "Arkansas's rule generally follows the Model Rule.", br("arkansas", "mjp")),
+      inHouse: w("Ark. R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("arkansas", "house-counsel"), { noRegistration: true }),
+      phv: w("Ark. Sup. Ct. Rules Governing Admission, Rule XIV (practice by comity)", "A trial court may require the nonresident lawyer to associate with Arkansas counsel.", br("arkansas", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    DE: {
+      rule: w("Del. Lawyers' R. Prof. Conduct 5.5", "", br("delaware", "mjp")),
+      inHouse: w("Del. Sup. Ct. R. 55.1", "In-house lawyers with a systematic Delaware presence need a Certificate of Limited Practice, filed within 30 days of starting. The employer must have a Delaware place of business where employees regularly work.", br("delaware", "house-counsel")),
+      phv: u("Del. Sup. Ct. R. 72 (Supreme Court); trial courts have parallel rules", "A Delaware lawyer with a Delaware office must move the admission, appear, and attend proceedings."),
+      remoteNone: NONE_FOUND
+    },
+    GA: {
+      rule: w("Ga. R. Prof. Conduct 5.5", "Georgia's rule has separate provisions for \"Domestic Lawyers\" and \"Foreign Lawyers.\"", br("georgia", "mjp")),
+      inHouse: w("Ga. R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("georgia", "house-counsel"), { noRegistration: true }),
+      phv: w("Ga. Unif. Super. Ct. R. 4.4", "Pro hac vice requires association with Georgia counsel.", br("georgia", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    ID: {
+      rule: w("Idaho R. Prof. Conduct 5.5", "Idaho's rule is structured differently from the Model Rule; its temporary-practice safe harbors are in 5.5(b).", br("idaho", "mjp")),
+      inHouse: w("Idaho Bar Comm'n R. 225", "A House Counsel License is required for continuous practice for an Idaho employer. House counsel may not appear in courts or administrative proceedings and must keep an Idaho office.", br("idaho", "house-counsel")),
+      phv: w("Idaho Bar Comm'n R. 227", "Idaho local counsel must associate and generally appear in person with the pro hac vice lawyer.", br("idaho", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    IN: {
+      rule: w("Ind. R. Prof. Conduct 5.5", "Indiana's rule generally tracks the Model Rule.", br("indiana", "mjp")),
+      inHouse: w("Ind. Admis. & Disc. R. 6, § 2", "A Business Counsel License is required. Practice is limited to the employer, all compensation must come from it, and a law update seminar is due within 12 months.", br("indiana", "house-counsel")),
+      phv: w("Ind. Admis. & Disc. R. 3, § 2", "Temporary admission on petition requires association with Indiana counsel.", br("indiana", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    IA: {
+      rule: w("Iowa R. Prof'l Conduct 32:5.5", "Iowa's rule generally follows the Model Rule.", br("iowa", "mjp")),
+      inHouse: w("Iowa Ct. R. 31.16", "In-house lawyers with an Iowa office or systematic presence must register; registration lasts five years.", br("iowa", "house-counsel")),
+      phv: w("Iowa Ct. R. 31.14", "Pro hac vice admission for a particular proceeding.", br("iowa", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    KS: {
+      rule: w("Kan. R. Prof'l Conduct 5.5", "", br("kansas", "mjp")),
+      inHouse: w("Kan. Sup. Ct. R. 721", "A restricted license is required to serve one qualifying Kansas employer.", br("kansas", "house-counsel")),
+      phv: w("Kan. Sup. Ct. R. 116 (district courts); R. 1.10 (appellate courts)", "Kansas counsel must actively participate, sign filings, and attend arguments. Applicants must disclose Kansas pro hac vice appearances in the past 12 months.", br("kansas", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    KY: {
+      rule: w("Ky. SCR 3.130(5.5)", "Kentucky's rule generally tracks the Model Rule.", br("kentucky", "mjp")),
+      inHouse: w("Ky. SCR 2.111", "A limited certificate of admission is required. It ends if employment ends, unless new qualifying Kentucky employment begins within 30 days.", br("kentucky", "house-counsel")),
+      phv: w("Ky. SCR 3.030(2)", "Pro hac vice requires association with Kentucky counsel.", br("kentucky", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    LA: {
+      rule: w("La. R. Prof. Conduct 5.5", "", br("louisiana", "mjp")),
+      inHouse: w("La. Sup. Ct. R. XVII, § 14", "A limited license, valid four years and renewable, is required. In-house counsel may not be counsel of record in Louisiana courts.", br("louisiana", "house-counsel")),
+      phv: w("La. Sup. Ct. R. XVII, § 13", "Louisiana counsel must be associated and remains responsible. Admission may be denied for appearances so frequent they amount to regular practice in Louisiana, or for lawyers who live or are regularly employed in Louisiana.", br("louisiana", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    MD: {
+      rule: w("Md. Attorneys' Rules of Prof'l Conduct 5.5 (Md. Rule 19-305.5)", "Maryland's rule generally tracks the Model Rule.", br("maryland", "mjp")),
+      inHouse: w("Md. Rule 19-305.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("maryland", "house-counsel"), { noRegistration: true }),
+      phv: w("Rules Governing Admission to the Maryland Bar (pro hac vice)", "Pro hac vice requires association with Maryland counsel and is limited to the proceeding.", br("maryland", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    MS: {
+      rule: w("Miss. R. Prof. Conduct 5.5", "Mississippi's rule generally tracks the Model Rule.", br("mississippi", "mjp")),
+      inHouse: w("Miss. R. Prof. Conduct 5.5(d)", "In-house and government lawyers with a Mississippi office or systematic presence must register annually with The Mississippi Bar.", br("mississippi", "house-counsel")),
+      phv: w("Miss. R. App. P. 46(b)", "Appearing in more than five unrelated matters in 12 months is \"general practice\" and makes a lawyer ineligible. Mississippi counsel must associate and is jointly responsible.", br("mississippi", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    MT: {
+      rule: w("Mont. R. Prof. Conduct 5.5", "Montana's rule generally tracks the Model Rule.", br("montana", "mjp")),
+      inHouse: w("Mont. R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("montana", "house-counsel"), { noRegistration: true }),
+      phv: w("Montana pro hac vice rules, Rule IV", "Pro hac vice requires association with Montana counsel.", br("montana", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    NE: {
+      rule: w("Neb. Ct. R. Prof. Conduct § 3-505.5", "Nebraska's rule generally tracks the Model Rule.", br("nebraska", "mjp")),
+      inHouse: w("Neb. Ct. R. ch. 3, art. 12", "Out-of-state lawyers employed as in-house counsel in Nebraska must register with Attorney Services.", br("nebraska", "house-counsel")),
+      phv: w("Neb. Ct. R. § 3-106", "The out-of-state lawyer must associate with a Nebraska-resident lawyer admitted in Nebraska.", br("nebraska", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    NV: {
+      rule: w("Nev. R. Prof. Conduct 5.5, 5.5A", "Nevada's rule is structured differently from the Model Rule, with safe harbors in 5.5(b); Rule 5.5A requires reporting some out-of-state lawyer activity.", br("nevada", "mjp")),
+      inHouse: w("Nev. Sup. Ct. R. 49.1", "In-house counsel who live in Nevada need limited-practice certification.", br("nevada", "house-counsel")),
+      phv: w("Nev. Sup. Ct. R. 42", "More than five appearances in three years is presumed excessive. Lawyers who live or are regularly employed in Nevada are ineligible. Nevada counsel must associate and appear.", br("nevada", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    NM: {
+      rule: w("N.M. R. Prof. Conduct 16-505 NMRA (Rule 5.5)", "New Mexico's rule generally tracks the Model Rule.", br("new-mexico", "mjp")),
+      inHouse: w("Rule 16-505(D)(1) NMRA", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("new-mexico", "house-counsel"), { noRegistration: true }),
+      phv: w("Rule 24-106 NMRA", "A New Mexico lawyer must associate, sign the first filing, and appear unless excused. A separate application is needed for each case.", br("new-mexico", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    ND: {
+      rule: w("N.D. R. Prof. Conduct 5.5", "North Dakota's rule generally tracks the Model Rule.", br("north-dakota", "mjp")),
+      inHouse: w("N.D. Admission to Practice R. 3(C)", "Nonresident in-house lawyers must register annually, for up to five years or until eligible for admission on motion.", br("north-dakota", "house-counsel")),
+      phv: w("N.D. Admission to Practice R. 3(A)", "A North Dakota associate lawyer must appear in person; the motion is due within 45 days after service of the initiating paper.", br("north-dakota", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    OK: {
+      rule: w("Okla. R. Prof. Conduct 5.5", "Oklahoma's rule generally tracks the Model Rule.", br("oklahoma", "mjp")),
+      inHouse: w("Rules Governing Admission to the Practice of Law in Okla., Rule Two, § 5", "Full-time in-house work for an Oklahoma employer may require a Special Temporary Permit, which generally requires Oklahoma residence and admission in a reciprocal jurisdiction.", br("oklahoma", "house-counsel")),
+      phv: w("Okla. Stat. tit. 5, ch. 1, app. 1, art. II, § 5", "An Oklahoma lawyer must sign filings and attend hearings. A separate application is needed for each proceeding, renewed annually.", br("oklahoma", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    OR: {
+      rule: w("Or. R. Prof. Conduct 5.5", "Oregon's rule generally tracks the Model Rule.", br("oregon", "mjp")),
+      inHouse: w("Or. Rules for Admission 16.05", "House counsel need limited admission, must identify their limited status on business materials, and certify compliance yearly.", br("oregon", "house-counsel")),
+      phv: w("UTCR 3.170; ORS 9.241", "Pro hac vice admission is certified through the Oregon State Bar and lasts one year.", br("oregon", "pro-hac-vice")),
+      remote: w("Or. Formal Ethics Op. 2022-200", "A lawyer licensed elsewhere who lives in Oregon and practices only that jurisdiction's law, without Oregon clients, soliciting Oregon work, or holding out, is not engaged in unlawful practice. This applies to private and in-house lawyers, and to home or commercial offices.", "https://www.osbar.org/_docs/ethics/2022-200.pdf")
+    },
+    SD: {
+      rule: w("S.D. R. Prof. Conduct 5.5", "South Dakota's rule generally tracks the Model Rule.", br("south-dakota", "mjp")),
+      phv: w("SDCL § 16-18-2", "The out-of-state lawyer must associate with a South Dakota-resident lawyer who personally participates, and must obtain a South Dakota sales and use tax license unless appearing as part of full-time employment.", br("south-dakota", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    TN: {
+      rule: w("Tenn. Sup. Ct. R. 8, RPC 5.5", "Tennessee's rule generally tracks the Model Rule.", br("tennessee", "mjp")),
+      inHouse: w("Tenn. Sup. Ct. R. 7, § 10.01", "In-house lawyers with a systematic Tennessee presence must register through the Board of Law Examiners.", br("tennessee", "house-counsel")),
+      phv: w("Tenn. Sup. Ct. R. 19", "Pro hac vice requires association with Tennessee counsel; file the motion by your first appearance or filing.", br("tennessee", "pro-hac-vice")),
+      remoteNone: NONE_FOUND
+    },
+    WV: {
+      rule: w("W. Va. R. Prof. Conduct 5.5", "West Virginia's rule generally tracks the Model Rule.", br("west-virginia", "mjp")),
+      inHouse: w("W. Va. R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("west-virginia", "house-counsel"), { noRegistration: true }),
+      phv: w("W. Va. Rules for Admission to the Practice of Law, Rule 8.0", "A West Virginia lawyer with a principal place of business in West Virginia must move the admission; the fee is $350 per applicant per case.", "https://www.courtswv.gov/sites/default/pubfilesmnt/2023-07/Admission-Rule-8-Final-Effective-Jan-1-2015_0.pdf"),
+      remoteNone: NONE_FOUND
+    },
+    WY: {
+      rule: w("Wyo. R. Prof. Conduct 5.5", "Wyoming's rule generally tracks the Model Rule.", br("wyoming", "mjp")),
+      inHouse: w("Wyo. R. Prof. Conduct 5.5(d)(1)", "Lawyers admitted elsewhere may serve their employer or its affiliates under the in-house safe harbor without a separate registration. Court appearances still need pro hac vice.", br("wyoming", "house-counsel"), { noRegistration: true }),
+      phv: w("Rules Governing Admission to the Practice of Law in Wyo., Rule 8", "A Wyoming lawyer must move the admission, and local counsel must participate in preparation and trial as the court requires.", "https://www.wyocourts.gov/app/uploads/2025/01/Order-Amending-Rule-8-of-Rules-Governing-Admission-to-Practice-of-Law-1.pdf"),
+      remoteNone: NONE_FOUND
     }
   };
 
