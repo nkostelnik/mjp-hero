@@ -18,7 +18,7 @@ html = html.replace(/<script src="([^"]+)"><\/script>/g, function (_, src) {
   return "<script>\n/* " + src + " */\n" + js + "</script>";
 });
 
-if (/<(link|script)[^>]+(href|src)=/.test(html)) throw new Error("An external file was not inlined.");
+if (/<link[^>]+rel="stylesheet"|<script[^>]+src=/.test(html)) throw new Error("An external file was not inlined.");
 
 var pkg = require("./package.json");
 html = html.replace("<title>MJP Hero</title>", "<title>MJP Hero</title>\n  <!-- Single-file build of MJP Hero v" + pkg.version + ". MIT License. -->");
